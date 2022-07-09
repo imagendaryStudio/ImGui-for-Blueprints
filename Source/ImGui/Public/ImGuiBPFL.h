@@ -76,19 +76,19 @@ public:
 	static void StopPrintingMainWindow();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
-	static void AddTextToWindow(FString Text);
+	static void AddText(FString Text);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
 	static void StayInSameWindowLine();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
-	static void AddButtonToWindow(FString Name, bool& bClicked);
+	static void AddButton(FString Name, bool& bClicked);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
-	static void AddSeparatorToWindow();
+	static void AddSeparator();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
-	static void AddSpacingToWindow();
+	static void AddSpacing();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
 	static void SetNextWindowRelativePosition(FVector2D RelativeScreenPosition, ImGui_WindowConditions Condition);
@@ -103,7 +103,7 @@ public:
 	static void SetNextWindowFocused();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
-	static void AddCollapsingHeaderToWindow(FString Name, bool& bOpen);
+	static void AddCollapsingHeader(FString Name, bool& bOpen);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
 	static void StartPrintingChild(FString Name, FVector2D SizeInPixels, bool bBorder, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties);
@@ -118,16 +118,16 @@ public:
 	static void StopPrintingGroup();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
-	static void AddCheckboxToWindow(FString Label, bool bOldState, bool& bNewState, bool& bStateChanged);
+	static void AddCheckbox(FString Label, bool bOldState, bool& bNewState, bool& bStateChanged);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
-	static void AddRadioButtonsToWindow(TSet<FString> Labels, int OldState, int& NewState, bool& bStateChanged);
+	static void AddRadioButtons(TSet<FString> Labels, int OldState, int& NewState, bool& bStateChanged);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
-	static void AddBulletToWindow();
+	static void AddBullet();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
-	static void AddProgressBarToWindow(FVector2D SizeInPixels, float Progress, FString Overlay = " ");
+	static void AddProgressBar(FVector2D SizeInPixels, float Progress, FString Overlay = " ");
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
 	static void StartPrintingCombo(FString Label, FString Preview, bool& bOpen);
@@ -146,6 +146,16 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
 	static void StopAddingToMenuBar();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
+	static void StartPrintingMainMenuBar();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
+	static void StopPrintingMainMenuBar();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
+	static void AddMainMenuItem(FString Label, FString Shortcut, bool bSelected, bool bEnabled, bool& bClicked);
+
 
 private:
 
