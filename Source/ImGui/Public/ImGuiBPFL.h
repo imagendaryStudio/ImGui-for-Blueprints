@@ -48,6 +48,21 @@ enum ImGui_WindowConditions
 	Appearing =		ImGuiCond_Appearing		UMETA(DisplayName = "Appearing")
 };
 
+
+UENUM(BlueprintType)//, Category = "DearImGui")
+enum VariableType
+{
+	Type_Float		UMETA(DisplayName = "Float"),
+	Type_Float2		UMETA(DisplayName = "Vector 2D"),
+	Type_Float3		UMETA(DisplayName = "Vector"),
+	Type_Float4		UMETA(DisplayName = "Vector 4"),
+	Type_Int		UMETA(DisplayName = "Int"),
+	Type_Rotator	UMETA(DisplayName = "Rotator"),
+	Type_Transfomr	UMETA(DisplayName = "Transform")
+};
+
+
+
 UCLASS()
 class IMGUI_API UImGuiBPFL : public UBlueprintFunctionLibrary
 {
@@ -156,6 +171,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
 	static void AddMainMenuItem(FString Label, FString Shortcut, bool bSelected, bool bEnabled, bool& bClicked);
 
+	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (DevelopmentOnly))
+	static void TestGenericFunction(const TArray<UProperty*>& TargetArray, UProperty*& Item);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui", meta = (CustomStructureParam = "Input, Item"))
+	static FString Test(UProperty* Input, UProperty*& Item);
 
 private:
 

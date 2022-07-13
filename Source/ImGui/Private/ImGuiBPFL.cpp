@@ -318,6 +318,21 @@ void UImGuiBPFL::AddMainMenuItem(FString Label, FString Shortcut, bool bSelected
 		ImGui::MenuItem(&*LabelConvertBuffer.begin(), &*LabelConvertBuffer.begin(), bSelected, bEnabled);
 }
 
+void UImGuiBPFL::TestGenericFunction(const TArray<UProperty*>& TargetArray, UProperty*& Item)
+{
+
+}
+
+FString UImGuiBPFL::Test(UProperty* Input, UProperty*& Item)
+{
+	if (typeid(Input) == typeid(bool))
+		return "bool";
+	return typeid(Input).name();
+
+	
+
+	//Item = (UProperty * )testvar;
+}
 
 
 void UImGuiBPFL::TestFunction()
@@ -328,10 +343,8 @@ void UImGuiBPFL::TestFunction()
 	ImGui::MenuItem("Test MenuItem", nullptr, &bTestBooll, true);
 	if (bTestBooll)
 	{
-		ImGui::Text("Siema0");
-		ImGui::Text("Siema1");
-		ImGui::Text("Siema2");
-		ImGui::Text("Siema3");
+		static int testint[4] = { 1,2,3,4 };
+		ImGui::DragIntRange2("Test DragIntRange2", &testint[0], &testint[1], (1.0f), -10, 10);
 	}
 	//ImGui::EndMenuBar();
 	ImGui::End();
