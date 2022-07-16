@@ -344,6 +344,32 @@ void UImGuiBPFL::AddDragIntArray(FString Label, UPARAM(ref) TArray<int>& Dragged
 	delete[] PassByRefArray;
 }
 
+//SLIDER
+
+void UImGuiBPFL::AddSliderFloatArray(FString Label, UPARAM(ref) TArray<float>& DraggedArrayReference, float MinValue, float MaxValue)
+{
+	float* PassByRefArray = new float[DraggedArrayReference.Num()];
+	for (int i = 0; i < DraggedArrayReference.Num(); i++)
+		PassByRefArray[i] = DraggedArrayReference[i];
+	std::string ConvertBuffer = TCHAR_TO_UTF8(*Label);
+	ImGui::SliderScalarN(&*ConvertBuffer.begin(), ImGuiDataType_Float, PassByRefArray, DraggedArrayReference.Num(), &MinValue, &MaxValue);
+	for (int i = 0; i < DraggedArrayReference.Num(); i++)
+		DraggedArrayReference[i] = PassByRefArray[i];
+	delete[] PassByRefArray;
+}
+
+void UImGuiBPFL::AddSliderIntArray(FString Label, UPARAM(ref) TArray<int>& DraggedArrayReference, int MinValue, int MaxValue)
+{
+	int* PassByRefArray = new int[DraggedArrayReference.Num()];
+	for (int i = 0; i < DraggedArrayReference.Num(); i++)
+		PassByRefArray[i] = DraggedArrayReference[i];
+	std::string ConvertBuffer = TCHAR_TO_UTF8(*Label);
+	ImGui::SliderScalarN(&*ConvertBuffer.begin(), ImGuiDataType_S32, PassByRefArray, DraggedArrayReference.Num(), &MinValue, &MaxValue);
+	for (int i = 0; i < DraggedArrayReference.Num(); i++)
+		DraggedArrayReference[i] = PassByRefArray[i];
+	delete[] PassByRefArray;
+}
+
 //TEST Func
 
 void UImGuiBPFL::TestFunction()
