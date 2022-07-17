@@ -3,6 +3,7 @@
 
 #include "ImGuiBPFL.h"
 #include <imgui.h>
+//#include <imgui_internal.h>
 #include <string>
 
 
@@ -310,24 +311,39 @@ void UImGuiBPFL::AddSliderIntArray(FString Label, UPARAM(ref) TArray<int>& Dragg
 	delete[] PassByRefArray;
 }
 
+void UImGuiBPFL::AddInputTextBox(FString Label, FString Hint, UPARAM(ref) FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, TSet<TEnumAsByte<ImGui_InputTextType>> Properties, bool& bCallback)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+	char* HintConverted = TCHAR_TO_ANSI(*Hint);
+	char* InputedFStingConverted = TCHAR_TO_ANSI(*InputedString);
 
+	int MaxCharactersCountConverted = MaxCharactersCount == 0 ? sizeof(InputedFStingConverted) : MaxCharactersCount;
+	ImVec2 BoxSizeConverted = ScreenSizeToPixels(BoxSize);
+
+	ImGuiInputTextFlags Flags = 0;
+	for (ImGui_InputTextType SimpleFlag : Properties)
+		Flags += GetFixedInputTextFlag(SimpleFlag);
+
+	bCallback =
+		ImGui::InputTextExSafe(LabelConverted, HintConverted, InputedFStingConverted, MaxCharactersCountConverted, BoxSizeConverted, Flags);
+
+	InputedString = FString(ANSI_TO_TCHAR(InputedFStingConverted));
+}
 
 //TEST Func
 
 void UImGuiBPFL::TestFunction()
 {
 	ImGui::Begin("Test Window", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
-	//ImGui::BeginMenuBar();
-	static bool bTestBooll = true;
-	ImGui::MenuItem("Test MenuItem", nullptr, &bTestBooll, true);
-	if (bTestBooll)
+	static char teststring[] = "hello";
+	if (ImGui::InputTextExSafe("test input box", "test hint", teststring, 100, ImVec2(0, 0), ImGuiInputTextFlags_EnterReturnsTrue))
 	{
-		//static int testint[4] = { 1,2,3,4 };
-		static float v = 0;
-		ImGui::DragFloat("Test DragIntRange2",  &v);
+		FString Message = "Inputed";
+		GEngine->AddOnScreenDebugMessage((int32)(GetTypeHash(Message)), 2, FColor::Red, Message);
+		UE_LOG(LogTemp, Error, TEXT("Inputed"))
 	}
-	//ImGui::EndMenuBar();
 	ImGui::End();
+	//ImGui::InputText()
 }
 
 //Private
@@ -391,3 +407,49 @@ ImGuiWindowFlags UImGuiBPFL::GetFixedWidnowFlag(ImGui_WindowFlags Flag)
 	}
 }
 
+ImGuiInputTextFlags UImGuiBPFL::GetFixedInputTextFlag(ImGui_InputTextType Flag)
+{
+	switch (Flag)
+	{
+	case InputText_None:
+		return ImGuiInputTextFlags_None;
+	case InputText_CharsDecimal:
+		return ImGuiInputTextFlags_CharsDecimal;
+	case InputText_Uppercases:
+		return ImGuiInputTextFlags_CharsUppercase;
+	case InputText_NoBlanks:
+		return ImGuiInputTextFlags_CharsNoBlank;
+	case InputText_AutoSelectAll:
+		return ImGuiInputTextFlags_AutoSelectAll;
+	case InputText_EnterReturnsTrue:
+		return ImGuiInputTextFlags_EnterReturnsTrue;
+	case InputText_AllowTabInput:
+		return ImGuiInputTextFlags_AllowTabInput;
+	case InputText_CtrlEnterForNewLine:
+		return ImGuiInputTextFlags_CtrlEnterForNewLine;
+	case InputText_NoHorizontalScroll:
+		return ImGuiInputTextFlags_NoHorizontalScroll;
+	case InputText_ReadOnly:
+		return ImGuiInputTextFlags_ReadOnly;
+	case InputText_Password:
+		return ImGuiInputTextFlags_Password;
+	case InputText_NoUndoRedo:
+		return ImGuiInputTextFlags_NoUndoRedo;
+	case InputText_CharsScientific:
+		return ImGuiInputTextFlags_CharsScientific;
+	default:
+		FString Message = "'ImGuiInputTextFlags UImGuiBPFL::GetFixedInputTextFlag(ImGui_InputTextType Flag)' method just returned 'None' due to reching default case in switch on ImGui_InputTextType. Probably new value was added to enum but not to switch.";
+		GEngine->AddOnScreenDebugMessage((int32)(GetTypeHash(Message)), 0, FColor::Red, Message);
+		return ImGuiWindowFlags_None;
+		break;
+	}
+}
+
+ImVec2 UImGuiBPFL::ScreenSizeToPixels(FVector2D ScreenSize)
+{
+	FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+	return ImVec2(
+		ScreenSize.X < 0 ? 0 : ScreenSize.X <= 1 ? ViewportSize.X * ScreenSize.X : ScreenSize.X,
+		ScreenSize.Y < 0 ? 0 : ScreenSize.Y <= 1 ? ViewportSize.Y * ScreenSize.Y : ScreenSize.Y
+	);
+}
