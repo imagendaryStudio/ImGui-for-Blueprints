@@ -192,9 +192,5 @@ public:
 
 private:
 
-	static bool ValidateWindowFunction(bool bShallPrintingFlagBeSet, FString FunctionName, FString PassedData, FString AdditionalErrorMessage);
-
-	static void TextMousePosition();
-
     static ImGuiWindowFlags GetFixedWidnowFlag(ImGui_WindowFlags Flag);
 };
