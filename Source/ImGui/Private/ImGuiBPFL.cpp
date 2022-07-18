@@ -140,7 +140,34 @@ void UImGuiBPFL::SetNextWindowFocused()
 // Parameters stacks (shared)
 // Parameters stacks (current window)
 // Style read access
-// Cursor / Layout
+
+/* Cursor / Layout */
+
+void UImGuiBPFL::AddSeparator()
+{
+	ImGui::Separator();
+}
+
+void UImGuiBPFL::StayInSameLine()
+{
+	ImGui::SameLine();
+}
+
+void UImGuiBPFL::AddSpacing()
+{
+	ImGui::Spacing();
+}
+
+void UImGuiBPFL::StartPrintingGroup()
+{
+	ImGui::BeginGroup();
+}
+
+void UImGuiBPFL::StopPrintingGroup()
+{
+	ImGui::EndGroup();
+}
+
 // ID stack/scopes
 // Widgets: Text
 // Widgets: Main
@@ -192,10 +219,6 @@ void UImGuiBPFL::AddText(FString Text)
 	ImGui::Text(&*ConvertBuffer.begin());
 }
 
-void UImGuiBPFL::StayInSameWindowLine()
-{
-	ImGui::SameLine();
-}
 
 void UImGuiBPFL::AddButton(FString Name, bool& bClicked)
 {
@@ -204,31 +227,11 @@ void UImGuiBPFL::AddButton(FString Name, bool& bClicked)
 	bClicked = ImGui::Button(&*ConvertBuffer.begin());
 }
 
-void UImGuiBPFL::AddSeparator()
-{
-	ImGui::Separator();
-}
-
-void UImGuiBPFL::AddSpacing()
-{
-	ImGui::Spacing();
-}
-
 void UImGuiBPFL::AddCollapsingHeader(FString Name, bool& bOpen)
 {
 	bOpen = false;
 	std::string ConvertBuffer = TCHAR_TO_UTF8(*Name);
 	bOpen = ImGui::CollapsingHeader(&*ConvertBuffer.begin());
-}
-
-void UImGuiBPFL::StartPrintingGroup()
-{
-	ImGui::BeginGroup();
-}
-
-void UImGuiBPFL::StopPrintingGroup()
-{
-	ImGui::EndGroup();
 }
 
 void UImGuiBPFL::AddCheckbox(FString Label, bool bOldState, bool& bNewState, bool& bStateChanged)

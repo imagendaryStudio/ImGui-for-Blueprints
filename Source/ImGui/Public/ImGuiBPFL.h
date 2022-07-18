@@ -156,7 +156,24 @@ public:
 // Parameters stacks (shared)
 // Parameters stacks (current window)
 // Style read access
-// Cursor / Layout
+
+/* Cursor / Layout */
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
+	static void AddSeparator();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
+	static void StayInSameLine();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
+	static void AddSpacing();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
+	static void StartPrintingGroup();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
+	static void StopPrintingGroup();
+
 // ID stack/scopes
 // Widgets: Text
 // Widgets: Main
@@ -205,25 +222,10 @@ public:
 	static void AddText(FString Text);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void StayInSameWindowLine();
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
 	static void AddButton(FString Name, bool& bClicked);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void AddSeparator();
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void AddSpacing();
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
 	static void AddCollapsingHeader(FString Name, bool& bOpen);
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void StartPrintingGroup();
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void StopPrintingGroup();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
 	static void AddCheckbox(FString Label, bool bOldState, bool& bNewState, bool& bStateChanged);
