@@ -8,6 +8,7 @@
 #include "ImGuiBPFL.generated.h"
 
 
+/* structs */
 
 UENUM(BlueprintType)
 enum ImGui_WindowFlags
@@ -100,22 +101,105 @@ public:
 	//placeholders / test
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void PrintSimpleWindow(FString Name, FString Text, FVector2D RelativeScreenPosition);
+	static void PrintSimpleWindow(FString Name, FString Text, FVector2D ScreenPosition);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void PrintSimpleWatermark(FString Name, FString Text, FVector2D RelativeScreenPosition, bool bPrintTextOnly, float BackgroundAlpha);
+	static void PrintSimpleWatermark(FString Name, FString Text, FVector2D ScreenPosition, bool bPrintTextOnly, float BackgroundAlpha);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
 	static void TestFunction();
 
 
-	// Front-End for blueprints
+	/* - Functions for Blueprint Graphs -	*/
+
+// Context creation and access
+
+/* Main	*/
+
+// Demo, Debug, Information		
+// Styles
+
+/* Windows */
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
 	static void StartPrintingMainWindow(FString Name, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
 	static void StopPrintingMainWindow();
+
+/* Child Windows */
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
+	static void StartPrintingChild(FString Name, FVector2D SizeInPixels, bool bBorder, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
+	static void StopPrintingChild();
+
+// Windows Utilities
+
+/* Window manipulation */
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
+	static void SetNextWindowScreenPosition(FVector2D ScreenPosition, ImGui_WindowConditions Condition = Always);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
+	static void SetNextWindowBackgroundAlpha(float BackgroundAlpha);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
+	static void SetNextWindowCollapseState(bool bCollapsed);  //Do-poprawy/przemyœlenia - brak Condition
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
+	static void SetNextWindowFocused();
+
+// Content region
+// Windows Scrolling
+// Parameters stacks (shared)
+// Parameters stacks (current window)
+// Style read access
+// Cursor / Layout
+// ID stack/scopes
+// Widgets: Text
+// Widgets: Main
+// Widgets: Combo Box
+// Widgets: Drag Sliders
+// Widgets: Regular Sliders
+// Widgets: Input with Keyboard
+// Widgets: Color Editor/Picker (tip: the ColorEdit* functions have a little color square that can be left-clicked to open a picker, and right-clicked to open an option menu.)
+// Widgets: Trees
+// Widgets: Selectables
+// Widgets: List Boxes
+// Widgets: Data Plotting
+// Widgets: Value() Helpers.
+// Widgets: Menus
+// Tooltips
+// Popups: begin/end functions
+// Popups: open/close functions
+// Popups: open+begin combined functions helpers
+// Popups: query functions
+// Tables
+// Tables: Headers & Columns declaration
+// Tables: Sorting
+// Tables: Miscellaneous functions
+// Legacy Columns API (prefer using Tables!)
+// Tab Bars, Tabs
+// Logging/Capture
+// Drag and Drop
+// Disabling [BETA API]
+// Clipping
+// Focus, Activation
+// Item/Widgets Utilities and Query Functions
+// Viewports
+// Miscellaneous Utilities
+// Text Utilities
+// Color Utilities
+// Inputs Utilities: Keyboard
+// Inputs Utilities: Mouse
+// Clipboard Utilities
+// Settings/.Ini Utilities
+// Debug Utilities
+// Memory Allocators
+
+	
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
 	static void AddText(FString Text);
@@ -133,25 +217,7 @@ public:
 	static void AddSpacing();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void SetNextWindowRelativePosition(FVector2D RelativeScreenPosition, ImGui_WindowConditions Condition);
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void SetNextWindowBackgroundAlpha(float BackgroundAlpha);
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void SetNextWindowCollapseState(bool bCollapsed);  //Do-poprawy/przemyœlenia - brak Condition
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void SetNextWindowFocused();
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
 	static void AddCollapsingHeader(FString Name, bool& bOpen);
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void StartPrintingChild(FString Name, FVector2D SizeInPixels, bool bBorder, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties);
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void StopPrintingChild();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
 	static void StartPrintingGroup();
@@ -219,5 +285,14 @@ private:
 
 	static ImGuiInputTextFlags GetFixedInputTextFlag(ImGui_InputTextType Flag);
 
-	static ImVec2 ScreenSizeToPixels(FVector2D ScreenSize = FVector2D(0, 0));
+	static ImVec2 GetScreenSizeInPixels(FVector2D ScreenSize = FVector2D(0, 0));
+
+	static ImVec2 GetRelativeScreenPosition(FVector2D ScreenSize = FVector2D(0, 0));
 };
+
+
+
+
+
+
+
