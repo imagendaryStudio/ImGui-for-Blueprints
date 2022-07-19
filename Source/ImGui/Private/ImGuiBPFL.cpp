@@ -169,8 +169,34 @@ void UImGuiBPFL::StopPrintingGroup()
 }
 
 // ID stack/scopes
-// Widgets: Text
-// Widgets: Main
+
+
+/* Widgets / Text */
+
+void UImGuiBPFL::AddText(FString Text)
+{
+	char* TextConverted = TCHAR_TO_ANSI(*Text);
+	ImGui::Text(TextConverted);
+}
+
+/* Widgets / Main */
+
+bool UImGuiBPFL::AddButton(FString Name, FVector2D Size)
+{
+	char* NameConverted = TCHAR_TO_ANSI(*Name);
+	ImVec2 SizeInPixels = GetScreenSizeInPixels(Size);
+
+	return ImGui::Button(NameConverted, SizeInPixels);
+}
+
+bool UImGuiBPFL::AddCheckbox(FString Label, bool& CheckedBool)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+	return ImGui::Checkbox(LabelConverted, &CheckedBool);
+}
+
+
+
 // Widgets: Combo Box
 // Widgets: Drag Sliders
 // Widgets: Regular Sliders
@@ -211,36 +237,11 @@ void UImGuiBPFL::StopPrintingGroup()
 // Memory Allocators
 
 
-
-
-void UImGuiBPFL::AddText(FString Text)
-{
-	std::string ConvertBuffer = TCHAR_TO_UTF8(*Text);
-	ImGui::Text(&*ConvertBuffer.begin());
-}
-
-
-void UImGuiBPFL::AddButton(FString Name, bool& bClicked)
-{
-	bClicked = false;
-	std::string ConvertBuffer = TCHAR_TO_UTF8(*Name);
-	bClicked = ImGui::Button(&*ConvertBuffer.begin());
-}
-
 void UImGuiBPFL::AddCollapsingHeader(FString Name, bool& bOpen)
 {
 	bOpen = false;
 	std::string ConvertBuffer = TCHAR_TO_UTF8(*Name);
 	bOpen = ImGui::CollapsingHeader(&*ConvertBuffer.begin());
-}
-
-void UImGuiBPFL::AddCheckbox(FString Label, bool bOldState, bool& bNewState, bool& bStateChanged)
-{
-	bStateChanged = false;
-	std::string ConvertBuffer = TCHAR_TO_UTF8(*Label);
-	if (ImGui::Checkbox(&*ConvertBuffer.begin(), &bOldState))
-		bStateChanged = true;
-	bNewState = bOldState;
 }
 
 void UImGuiBPFL::AddRadioButtons(TSet<FString> Labels, int OldState, int& NewState, bool& bStateChanged)
