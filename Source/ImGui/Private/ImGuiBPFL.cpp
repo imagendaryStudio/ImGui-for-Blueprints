@@ -195,7 +195,35 @@ bool UImGuiBPFL::AddCheckbox(FString Label, bool& CheckedBool)
 	return ImGui::Checkbox(LabelConverted, &CheckedBool);
 }
 
+bool UImGuiBPFL::AddRadioButton(FString Label, bool bActive)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+	return ImGui::RadioButton(LabelConverted, bActive);
+}
 
+bool UImGuiBPFL::AddRadioButtonList(TSet<FString> Labels, int& RadioedIntiger)
+{
+	bool bRadioedIntigerChanged = false;
+	int LabelIterator = 0;
+
+	for (FString label : Labels)
+	{
+		char* labelConverted = TCHAR_TO_ANSI(*label);
+		if (ImGui::RadioButton(labelConverted, &RadioedIntiger, LabelIterator))
+			bRadioedIntigerChanged = true; // this must be changed it branch, otherwise other buttons will set bRadioedIntigerChanged back to false
+		LabelIterator++;
+	}
+
+	return bRadioedIntigerChanged;
+}
+
+void UImGuiBPFL::AddProgressBar(float Fraction, FString Overlay, FVector2D Size)
+{
+	char* OverlayConverted = Overlay.IsEmpty() ? nullptr : TCHAR_TO_ANSI(*Overlay);
+	ImVec2 SizeInPixels = GetScreenSizeInPixels(Size);
+
+	ImGui::ProgressBar(Fraction, SizeInPixels, OverlayConverted);
+}
 
 // Widgets: Combo Box
 // Widgets: Drag Sliders
@@ -244,34 +272,9 @@ void UImGuiBPFL::AddCollapsingHeader(FString Name, bool& bOpen)
 	bOpen = ImGui::CollapsingHeader(&*ConvertBuffer.begin());
 }
 
-void UImGuiBPFL::AddRadioButtons(TSet<FString> Labels, int OldState, int& NewState, bool& bStateChanged)
-{
-	bStateChanged = false;
-	int labelIterator = 0;
-	for (FString label : Labels)
-	{
-		std::string ConvertBuffer = TCHAR_TO_UTF8(*label);
-		if (ImGui::RadioButton(&*ConvertBuffer.begin(), &OldState, labelIterator))
-			bStateChanged = true;
-		labelIterator++;
-	}
-	NewState = OldState;
-}
-
 void UImGuiBPFL::AddBullet()
 {
 	ImGui::Bullet();
-}
-
-void UImGuiBPFL::AddProgressBar(FVector2D SizeInPixels, float Progress, FString Overlay)
-{
-	std::string ConvertBuffer = TCHAR_TO_UTF8(*Overlay);
-	ImGui::ProgressBar
-	(
-		Progress,
-		SizeInPixels.X == 0 && SizeInPixels.Y == 0 ? ImVec2(-FLT_MIN, 0) : ImVec2(SizeInPixels.X, SizeInPixels.Y),
-		Overlay == " " ? nullptr : &*ConvertBuffer.begin()
-	);
 }
 
 void UImGuiBPFL::StartPrintingCombo(FString Label, FString Preview, bool& bOpen)

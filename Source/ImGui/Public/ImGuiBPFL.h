@@ -187,7 +187,16 @@ public:
 	static UPARAM(DisplayName = "bClicked") bool AddButton(FString Name, FVector2D Size);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
-	static UPARAM(DisplayName = "bClicked") bool AddCheckbox(FString Label, UPARAM(ref) bool& CheckedBool);
+	static UPARAM(DisplayName = "bChanged") bool AddCheckbox(FString Label, UPARAM(ref) bool& CheckedBool);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
+	static UPARAM(DisplayName = "bClicked") bool AddRadioButton(FString Label, bool bActive);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
+	static UPARAM(DisplayName = "bClicked") bool AddRadioButtonList(TSet<FString> Labels, UPARAM(ref) int& RadioedIntiger);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
+	static void AddProgressBar(float Fraction, FString Overlay, FVector2D Size);
 
 // Widgets: Combo Box
 // Widgets: Drag Sliders
@@ -232,13 +241,7 @@ public:
 	static void AddCollapsingHeader(FString Name, bool& bOpen);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void AddRadioButtons(TSet<FString> Labels, int OldState, int& NewState, bool& bStateChanged);
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
 	static void AddBullet();
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void AddProgressBar(FVector2D SizeInPixels, float Progress, FString Overlay = " ");
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
 	static void StartPrintingCombo(FString Label, FString Preview, bool& bOpen);
