@@ -195,8 +195,8 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
 	static UPARAM(DisplayName = "bClicked") bool AddRadioButtonList(TSet<FString> Labels, UPARAM(ref) int& RadioedIntiger);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
-	static void AddProgressBar(float Fraction, FString Overlay, FVector2D Size);
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Safe", meta = (DevelopmentOnly))
+	static void AddProgressBar(float Fraction, FVector2D Size, FString Overlay);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Safe", meta = (DevelopmentOnly))
 	static void AddBullet();
@@ -219,21 +219,33 @@ public:
 
 /* Widgets / Regular Sliders */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
 	static UPARAM(DisplayName = "bChanged") bool AddSliderFloatArray(FString Label, UPARAM(ref) TArray<float>& SlidedArrayReference, float MinValue = 0.0f, float MaxValue = 100.0f);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
 	static UPARAM(DisplayName = "bChanged") bool AddSliderIntArray(FString Label, UPARAM(ref) TArray<int>& SlidedArrayReference, int MinValue = 0, int MaxValue = 100);
 
 
-// Widgets: Input with Keyboard
+/* Widgets: Input with Keyboard	*/
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
+	static UPARAM(DisplayName = "bCallback") bool AddInputTextBox(FString Label, FString Hint, UPARAM(ref) FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, TSet<TEnumAsByte<ImGui_InputTextType>> Properties);
+
 // Widgets: Color Editor/Picker (tip: the ColorEdit* functions have a little color square that can be left-clicked to open a picker, and right-clicked to open an option menu.)
 // Widgets: Trees
 // Widgets: Selectables
 // Widgets: List Boxes
 // Widgets: Data Plotting
 // Widgets: Value() Helpers.
-// Widgets: Menus
+
+/* Widgets / Menus */
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
+	static void StartAddingToMenuBar();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
+	static void StopAddingToMenuBar();
+
 // Tooltips
 // Popups: begin/end functions
 // Popups: open/close functions
@@ -272,12 +284,6 @@ public:
 	static void StopPrintingMenu();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void StartAddingToMenuBar();
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void StopAddingToMenuBar();
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
 	static void StartPrintingMainMenuBar();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
@@ -285,9 +291,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
 	static void AddMainMenuItem(FString Label, FString Shortcut, bool bSelected, bool bEnabled, bool& bClicked);
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void AddInputTextBox(FString Label, FString Hint, UPARAM(ref) FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, TSet<TEnumAsByte<ImGui_InputTextType>> Properties, bool& bCallback);	  //finish me
 
 private:
 

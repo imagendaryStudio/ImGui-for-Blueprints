@@ -220,7 +220,7 @@ bool UImGuiBPFL::AddRadioButtonList(TSet<FString> Labels, int& RadioedIntiger)
 	return bRadioedIntigerChanged;
 }
 
-void UImGuiBPFL::AddProgressBar(float Fraction, FString Overlay, FVector2D Size)
+void UImGuiBPFL::AddProgressBar(float Fraction, FVector2D Size, FString Overlay)
 {
 	char* OverlayConverted = Overlay.IsEmpty() ? nullptr : TCHAR_TO_ANSI(*Overlay);
 	ImVec2 SizeInPixels = GetScreenSizeInPixels(Size);
@@ -321,7 +321,22 @@ bool UImGuiBPFL::AddSliderIntArray(FString Label, UPARAM(ref) TArray<int>& Slide
 
 /* Widgets: Input with Keyboard	*/
 
+bool UImGuiBPFL::AddInputTextBox(FString Label, FString Hint, FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, TSet<TEnumAsByte<ImGui_InputTextType>> Properties)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+	char* HintConverted = TCHAR_TO_ANSI(*Hint);
+	char* InputedStingConverted = TCHAR_TO_ANSI(*InputedString);
+	int MaxCharactersCountConverted = MaxCharactersCount == 0 ? sizeof(InputedStingConverted) : MaxCharactersCount;
+	ImVec2 BoxSizeConverted = GetScreenSizeInPixels(BoxSize);
+	ImGuiInputTextFlags Flags = 0;
+	for (ImGui_InputTextType SimpleFlag : Properties)
+		Flags += GetFixedInputTextFlag(SimpleFlag);
 
+	bool bCallback = ImGui::InputTextExSafe(LabelConverted, HintConverted, InputedStingConverted, MaxCharactersCountConverted, BoxSizeConverted, Flags);
+
+	InputedString = FString(ANSI_TO_TCHAR(InputedStingConverted));
+	return bCallback;
+}
 
 // Widgets: Color Editor/Picker (tip: the ColorEdit* functions have a little color square that can be left-clicked to open a picker, and right-clicked to open an option menu.)
 // Widgets: Trees
@@ -329,7 +344,18 @@ bool UImGuiBPFL::AddSliderIntArray(FString Label, UPARAM(ref) TArray<int>& Slide
 // Widgets: List Boxes
 // Widgets: Data Plotting
 // Widgets: Value() Helpers.
-// Widgets: Menus
+/* Widgets / Menus */
+
+void UImGuiBPFL::StartAddingToMenuBar()
+{
+	ImGui::BeginMenuBar();
+}
+
+void UImGuiBPFL::StopAddingToMenuBar()
+{
+	ImGui::EndMenuBar();
+}
+
 // Tooltips
 // Popups: begin/end functions
 // Popups: open/close functions
@@ -379,16 +405,6 @@ void UImGuiBPFL::StopPrintingMenu()
 	ImGui::EndMenu();
 }
 
-void UImGuiBPFL::StartAddingToMenuBar()
-{
-	ImGui::BeginMenuBar();
-}
-
-void UImGuiBPFL::StopAddingToMenuBar()
-{
-	ImGui::EndMenuBar();
-}
-
 void UImGuiBPFL::StartPrintingMainMenuBar()
 {
 	ImGui::BeginMainMenuBar();
@@ -405,25 +421,6 @@ void UImGuiBPFL::AddMainMenuItem(FString Label, FString Shortcut, bool bSelected
 	std::string ShortcutConvertBuffer = TCHAR_TO_UTF8(*Shortcut);
 	bClicked = 
 		ImGui::MenuItem(&*LabelConvertBuffer.begin(), &*LabelConvertBuffer.begin(), bSelected, bEnabled);
-}
-
-void UImGuiBPFL::AddInputTextBox(FString Label, FString Hint, UPARAM(ref) FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, TSet<TEnumAsByte<ImGui_InputTextType>> Properties, bool& bCallback)
-{
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
-	char* HintConverted = TCHAR_TO_ANSI(*Hint);
-	char* InputedFStingConverted = TCHAR_TO_ANSI(*InputedString);
-
-	int MaxCharactersCountConverted = MaxCharactersCount == 0 ? sizeof(InputedFStingConverted) : MaxCharactersCount;
-	ImVec2 BoxSizeConverted = GetScreenSizeInPixels(BoxSize);
-
-	ImGuiInputTextFlags Flags = 0;
-	for (ImGui_InputTextType SimpleFlag : Properties)
-		Flags += GetFixedInputTextFlag(SimpleFlag);
-
-	bCallback =
-		ImGui::InputTextExSafe(LabelConverted, HintConverted, InputedFStingConverted, MaxCharactersCountConverted, BoxSizeConverted, Flags);
-
-	InputedString = FString(ANSI_TO_TCHAR(InputedFStingConverted));
 }
 
 //TEST Func
