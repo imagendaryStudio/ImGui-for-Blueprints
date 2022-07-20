@@ -90,12 +90,15 @@ void UImGuiBPFL::StopPrintingMainWindow()
 
 /* Child Windows */
 
-void UImGuiBPFL::StartPrintingChild(FString Name, FVector2D SizeInPixels, bool bBorder, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties)
+bool UImGuiBPFL::StartPrintingChild(FString HashName, FVector2D Size, bool bBorder, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties)
 {
+	int HashId = GetTypeHash(HashName);
+	ImVec2 SizeInPixels = GetScreenSizeInPixels(Size);
 	ImGuiWindowFlags Flags = 0;
 	for (ImGui_WindowFlags SimpleFlag : Properties)
 		Flags += GetFixedWidnowFlag(SimpleFlag);
-	ImGui::BeginChild(GetTypeHash(Name), ImVec2(SizeInPixels.X, SizeInPixels.Y), bBorder, Flags);
+
+	return ImGui::BeginChild(HashId, SizeInPixels, bBorder, Flags);
 }
 
 void UImGuiBPFL::StopPrintingChild()
@@ -111,7 +114,7 @@ void UImGuiBPFL::SetNextWindowScreenPosition(FVector2D ScreenPosition, ImGui_Win
 {
 	FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
 
-	if (ViewportSize.X > 0 && ViewportSize.Y > 0)
+	if (ViewportSize.X > 0 && ViewportSize.Y > 0)	// don't call when viewport is just begin created
 	{
 		ImVec2 WindowPosition = GetScreenSizeInPixels(ScreenPosition);
 		ImVec2 WindowPivot = GetRelativeScreenPosition(ScreenPosition);
@@ -225,10 +228,101 @@ void UImGuiBPFL::AddProgressBar(float Fraction, FString Overlay, FVector2D Size)
 	ImGui::ProgressBar(Fraction, SizeInPixels, OverlayConverted);
 }
 
-// Widgets: Combo Box
+void UImGuiBPFL::AddBullet()
+{
+	ImGui::Bullet();
+}
+
+/* Widgets: Combo Box */
+
+bool UImGuiBPFL::StartPrintingCombo(FString Label, FString Preview)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+	char* PreviewConverted = TCHAR_TO_ANSI(*Preview);
+
+	return ImGui::BeginCombo(LabelConverted, PreviewConverted);
+}
+
+void UImGuiBPFL::StopPrintingCombo()
+{
+	ImGui::EndCombo();
+}
+
 // Widgets: Drag Sliders
-// Widgets: Regular Sliders
-// Widgets: Input with Keyboard
+
+bool UImGuiBPFL::AddDragFloatArray(FString Label, UPARAM(ref) TArray<float>& DraggedArrayReference, float DragSpeed, float MinValue, float MaxValue)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+	int ItemsAmount = DraggedArrayReference.Num();
+	float* PassByRefArray = new float[ItemsAmount];
+	for (int i = 0; i < ItemsAmount; i++)
+		PassByRefArray[i] = DraggedArrayReference[i];
+
+	
+	bool bChanged = ImGui::DragScalarN(LabelConverted, ImGuiDataType_Float, PassByRefArray, ItemsAmount, DragSpeed, &MinValue, &MaxValue);
+	for (int i = 0; i < ItemsAmount; i++)
+		DraggedArrayReference[i] = PassByRefArray[i];
+
+	delete[] PassByRefArray;
+	return bChanged;
+}
+
+bool UImGuiBPFL::AddDragIntArray(FString Label, UPARAM(ref) TArray<int>& DraggedArrayReference, float DragSpeed, int MinValue, int MaxValue)
+{
+
+	int ItemsAmount = DraggedArrayReference.Num();
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+	int* PassByRefArray = new int[ItemsAmount];
+	for (int i = 0; i < ItemsAmount; i++)
+		PassByRefArray[i] = DraggedArrayReference[i];
+	
+	bool bChanged = ImGui::DragScalarN(LabelConverted, ImGuiDataType_S32, PassByRefArray, ItemsAmount, DragSpeed, &MinValue, &MaxValue);
+	for (int i = 0; i < ItemsAmount; i++)
+		DraggedArrayReference[i] = PassByRefArray[i];
+
+	delete[] PassByRefArray;
+	return bChanged;
+}
+
+/* Widgets / Regular Sliders */
+
+bool UImGuiBPFL::AddSliderFloatArray(FString Label, UPARAM(ref) TArray<float>& SlidedArrayReference, float MinValue, float MaxValue)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+	int ItemsAmount = SlidedArrayReference.Num();
+	float* PassByRefArray = new float[ItemsAmount];
+	for (int i = 0; i < ItemsAmount; i++)
+		PassByRefArray[i] = SlidedArrayReference[i];
+
+
+	bool bChanged = ImGui::SliderScalarN(LabelConverted, ImGuiDataType_Float, PassByRefArray, ItemsAmount, &MinValue, &MaxValue);
+	for (int i = 0; i < ItemsAmount; i++)
+		SlidedArrayReference[i] = PassByRefArray[i];
+
+	delete[] PassByRefArray;
+	return bChanged;
+}
+
+bool UImGuiBPFL::AddSliderIntArray(FString Label, UPARAM(ref) TArray<int>& SlidedArrayReference, int MinValue, int MaxValue)
+{
+	int ItemsAmount = SlidedArrayReference.Num();
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+	int* PassByRefArray = new int[ItemsAmount];
+	for (int i = 0; i < ItemsAmount; i++)
+		PassByRefArray[i] = SlidedArrayReference[i];
+
+	bool bChanged = ImGui::SliderScalarN(LabelConverted, ImGuiDataType_S32, PassByRefArray, ItemsAmount, &MinValue, &MaxValue);
+	for (int i = 0; i < ItemsAmount; i++)
+		SlidedArrayReference[i] = PassByRefArray[i];
+
+	delete[] PassByRefArray;
+	return bChanged;
+}
+
+/* Widgets: Input with Keyboard	*/
+
+
+
 // Widgets: Color Editor/Picker (tip: the ColorEdit* functions have a little color square that can be left-clicked to open a picker, and right-clicked to open an option menu.)
 // Widgets: Trees
 // Widgets: Selectables
@@ -272,25 +366,6 @@ void UImGuiBPFL::AddCollapsingHeader(FString Name, bool& bOpen)
 	bOpen = ImGui::CollapsingHeader(&*ConvertBuffer.begin());
 }
 
-void UImGuiBPFL::AddBullet()
-{
-	ImGui::Bullet();
-}
-
-void UImGuiBPFL::StartPrintingCombo(FString Label, FString Preview, bool& bOpen)
-{
-	bOpen = false;
-	std::string ConvertBuffer_0 = TCHAR_TO_UTF8(*Label);
-	std::string ConvertBuffer_1 = TCHAR_TO_UTF8(*Preview);
-	if (ImGui::BeginCombo(&*ConvertBuffer_0.begin(), &*ConvertBuffer_1.begin()))
-		bOpen = true;
-}
-
-void UImGuiBPFL::StopPrintingCombo()
-{
-	ImGui::EndCombo();
-}
-
 void UImGuiBPFL::StartPrintingMenu(FString Label, bool bEnabled, bool& bOpen)
 {
 	bOpen = false;
@@ -330,54 +405,6 @@ void UImGuiBPFL::AddMainMenuItem(FString Label, FString Shortcut, bool bSelected
 	std::string ShortcutConvertBuffer = TCHAR_TO_UTF8(*Shortcut);
 	bClicked = 
 		ImGui::MenuItem(&*LabelConvertBuffer.begin(), &*LabelConvertBuffer.begin(), bSelected, bEnabled);
-}
-
-void UImGuiBPFL::AddDragFloatArray(FString Label, UPARAM(ref) TArray<float>& DraggedArrayReference, float DragSpeed, float MinValue, float MaxValue)
-{
-	float* PassByRefArray = new float[DraggedArrayReference.Num()];
-	for (int i = 0; i < DraggedArrayReference.Num(); i++)
-		PassByRefArray[i] = DraggedArrayReference[i];
-	std::string ConvertBuffer = TCHAR_TO_UTF8(*Label);
-	ImGui::DragScalarN(&*ConvertBuffer.begin(), ImGuiDataType_Float, PassByRefArray, DraggedArrayReference.Num(), DragSpeed, &MinValue, &MaxValue);
-	for (int i = 0; i < DraggedArrayReference.Num(); i++)
-		DraggedArrayReference[i] = PassByRefArray[i];
-	delete[] PassByRefArray;
-}
-
-void UImGuiBPFL::AddDragIntArray(FString Label, UPARAM(ref) TArray<int>& DraggedArrayReference, float DragSpeed, int MinValue, int MaxValue)
-{
-	int* PassByRefArray = new int[DraggedArrayReference.Num()];
-	for (int i = 0; i < DraggedArrayReference.Num(); i++)
-		PassByRefArray[i] = DraggedArrayReference[i];
-	std::string ConvertBuffer = TCHAR_TO_UTF8(*Label);
-	ImGui::DragScalarN(&*ConvertBuffer.begin(), ImGuiDataType_S32, PassByRefArray, DraggedArrayReference.Num(), DragSpeed, &MinValue, &MaxValue);
-	for (int i = 0; i < DraggedArrayReference.Num(); i++)
-		DraggedArrayReference[i] = PassByRefArray[i];
-	delete[] PassByRefArray;
-}
-
-void UImGuiBPFL::AddSliderFloatArray(FString Label, UPARAM(ref) TArray<float>& DraggedArrayReference, float MinValue, float MaxValue)
-{
-	float* PassByRefArray = new float[DraggedArrayReference.Num()];
-	for (int i = 0; i < DraggedArrayReference.Num(); i++)
-		PassByRefArray[i] = DraggedArrayReference[i];
-	std::string ConvertBuffer = TCHAR_TO_UTF8(*Label);
-	ImGui::SliderScalarN(&*ConvertBuffer.begin(), ImGuiDataType_Float, PassByRefArray, DraggedArrayReference.Num(), &MinValue, &MaxValue);
-	for (int i = 0; i < DraggedArrayReference.Num(); i++)
-		DraggedArrayReference[i] = PassByRefArray[i];
-	delete[] PassByRefArray;
-}
-
-void UImGuiBPFL::AddSliderIntArray(FString Label, UPARAM(ref) TArray<int>& DraggedArrayReference, int MinValue, int MaxValue)
-{
-	int* PassByRefArray = new int[DraggedArrayReference.Num()];
-	for (int i = 0; i < DraggedArrayReference.Num(); i++)
-		PassByRefArray[i] = DraggedArrayReference[i];
-	std::string ConvertBuffer = TCHAR_TO_UTF8(*Label);
-	ImGui::SliderScalarN(&*ConvertBuffer.begin(), ImGuiDataType_S32, PassByRefArray, DraggedArrayReference.Num(), &MinValue, &MaxValue);
-	for (int i = 0; i < DraggedArrayReference.Num(); i++)
-		DraggedArrayReference[i] = PassByRefArray[i];
-	delete[] PassByRefArray;
 }
 
 void UImGuiBPFL::AddInputTextBox(FString Label, FString Hint, UPARAM(ref) FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, TSet<TEnumAsByte<ImGui_InputTextType>> Properties, bool& bCallback)
