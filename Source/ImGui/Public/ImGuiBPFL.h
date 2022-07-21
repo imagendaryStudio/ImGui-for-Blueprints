@@ -232,7 +232,11 @@ public:
 	static UPARAM(DisplayName = "bCallback") bool AddInputTextBox(FString Label, FString Hint, UPARAM(ref) FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, TSet<TEnumAsByte<ImGui_InputTextType>> Properties);
 
 // Widgets: Color Editor/Picker (tip: the ColorEdit* functions have a little color square that can be left-clicked to open a picker, and right-clicked to open an option menu.)
-// Widgets: Trees
+/* Widgets / Trees */
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
+	static UPARAM(DisplayName = "bOpen") bool AddCollapsingHeader(FString Label);
+
 // Widgets: Selectables
 // Widgets: List Boxes
 // Widgets: Data Plotting
@@ -241,10 +245,25 @@ public:
 /* Widgets / Menus */
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
-	static void StartAddingToMenuBar();
+	static UPARAM(DisplayName = "bOpen") bool StartAddingToMenuBar();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
 	static void StopAddingToMenuBar();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
+	static UPARAM(DisplayName = "bOpen") bool StartPrintingMainMenuBar();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
+	static void StopPrintingMainMenuBar();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
+	static UPARAM(DisplayName = "bOpen") bool StartPrintingMenu(FString Label, bool bEnabled);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
+	static void StopPrintingMenu();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions|Raw", meta = (DevelopmentOnly))
+	static UPARAM(DisplayName = "bActivated") bool AddMenuItem(FString Label, FString Shortcut, UPARAM(ref) bool& bSelected, bool bEnabled);
 
 // Tooltips
 // Popups: begin/end functions
@@ -273,24 +292,6 @@ public:
 // Settings/.Ini Utilities
 // Debug Utilities
 // Memory Allocators
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void AddCollapsingHeader(FString Name, bool& bOpen);
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void StartPrintingMenu(FString Label, bool bEnabled, bool& bOpen);
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void StopPrintingMenu();
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void StartPrintingMainMenuBar();
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void StopPrintingMainMenuBar();
-
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|C++ Functions", meta = (DevelopmentOnly))
-	static void AddMainMenuItem(FString Label, FString Shortcut, bool bSelected, bool bEnabled, bool& bClicked);
 
 private:
 
