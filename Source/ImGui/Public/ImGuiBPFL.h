@@ -158,13 +158,25 @@ public:
 	static void SetNextWindowScreenPosition(FVector2D ScreenPosition, ImGui_WindowConditions Condition = Always);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|Window manipulation", meta = (DevelopmentOnly))
-	static void SetNextWindowBackgroundAlpha(float BackgroundAlpha);
+	static void SetNextWindowSize(FVector2D Size, ImGui_WindowConditions Condition = Always);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|Window manipulation", meta = (DevelopmentOnly))
-	static void SetNextWindowCollapseState(bool bCollapsed);  //Do-poprawy/przemyœlenia - brak Condition
+	static void SetNextWindowSizeConstraints(FVector2D SizeMin, FVector2D SizeMax);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Window manipulation", meta = (DevelopmentOnly))
+	static void SetNextWindowContentSize(FVector2D Size);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Window manipulation", meta = (DevelopmentOnly))
+	static void SetNextWindowCollapsed(bool bCollapsed, ImGui_WindowConditions Condition = Always);  //Do-poprawy/przemyœlenia - brak Condition
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|Window manipulation", meta = (DevelopmentOnly))
 	static void SetNextWindowFocused();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Window manipulation", meta = (DevelopmentOnly))
+	static void SetNextWindowBackgroundAlpha(float BackgroundAlpha);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Window manipulation", meta = (DevelopmentOnly))
+	static void SetWindowFontScale(float Scale = 1);
 
 // Content region
 // Windows Scrolling

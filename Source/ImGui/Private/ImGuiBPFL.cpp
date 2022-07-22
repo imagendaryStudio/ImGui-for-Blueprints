@@ -131,14 +131,49 @@ FVector2D UImGuiBPFL::GetWindowSize(bool bRelative)
 void UImGuiBPFL::SetNextWindowScreenPosition(FVector2D ScreenPosition, ImGui_WindowConditions Condition)
 {
 	FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+	ImVec2 WindowPosition = GetScreenSizeInPixels(ScreenPosition);
+	ImVec2 WindowPivot = GetRelativeScreenPosition(ScreenPosition);
 
 	if (ViewportSize.X > 0 && ViewportSize.Y > 0)	// don't call when viewport is just begin created
-	{
-		ImVec2 WindowPosition = GetScreenSizeInPixels(ScreenPosition);
-		ImVec2 WindowPivot = GetRelativeScreenPosition(ScreenPosition);
-
 		ImGui::SetNextWindowPos(WindowPosition, Condition, WindowPivot);
-	}
+}
+
+void UImGuiBPFL::SetNextWindowSize(FVector2D Size, ImGui_WindowConditions Condition)
+{
+	FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+	ImVec2 SizeConverted = GetScreenSizeInPixels(Size);
+
+	if (ViewportSize.X > 0 && ViewportSize.Y > 0)	 // don't call when viewport is just begin created
+		ImGui::SetNextWindowSize(SizeConverted, Condition);
+}
+
+void UImGuiBPFL::SetNextWindowSizeConstraints(FVector2D SizeMin, FVector2D SizeMax)
+{
+	FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+	ImVec2 SizeMinConverted = GetScreenSizeInPixels(SizeMin);
+	ImVec2 SizeMaxConverted = GetScreenSizeInPixels(SizeMax);
+
+	if (ViewportSize.X > 0 && ViewportSize.Y > 0)	 // don't call when viewport is just begin created
+		ImGui::SetNextWindowSizeConstraints(SizeMinConverted, SizeMaxConverted);
+}
+
+void UImGuiBPFL::SetNextWindowContentSize(FVector2D Size)
+{
+	FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
+	ImVec2 SizeConverted = GetScreenSizeInPixels(Size);;
+
+	if (ViewportSize.X > 0 && ViewportSize.Y > 0)	 // don't call when viewport is just begin created
+		ImGui::SetNextWindowContentSize(SizeConverted);
+}
+
+void UImGuiBPFL::SetNextWindowCollapsed(bool bCollapsed, ImGui_WindowConditions Condition)
+{
+	ImGui::SetNextWindowCollapsed(bCollapsed, Condition);
+}
+
+void UImGuiBPFL::SetNextWindowFocused()
+{
+	ImGui::SetNextWindowFocus();
 }
 
 void UImGuiBPFL::SetNextWindowBackgroundAlpha(float BackgroundAlpha)
@@ -146,14 +181,9 @@ void UImGuiBPFL::SetNextWindowBackgroundAlpha(float BackgroundAlpha)
 	ImGui::SetNextWindowBgAlpha(BackgroundAlpha);
 }
 
-void UImGuiBPFL::SetNextWindowCollapseState(bool bCollapsed) //Do-poprawy/przemyœlenia - brak Condition
+void UImGuiBPFL::SetWindowFontScale(float Scale)
 {
-	ImGui::SetNextWindowCollapsed(bCollapsed, ImGuiCond_Always);
-}
-
-void UImGuiBPFL::SetNextWindowFocused()
-{
-	ImGui::SetNextWindowFocus();
+	ImGui::SetWindowFontScale(Scale);
 }
 
 // Content region
