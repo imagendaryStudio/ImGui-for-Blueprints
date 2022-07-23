@@ -196,9 +196,12 @@ public:
 	static void AddSpacing();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|Cursor|Layout", meta = (DevelopmentOnly))
+	static void Indent(float ToRight = 0);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Cursor|Layout", meta = (DevelopmentOnly))
 	static void StartPrintingGroup();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|Cursor|Layout|", meta = (DevelopmentOnly))
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Cursor|Layout", meta = (DevelopmentOnly))
 	static void StopPrintingGroup();
 
 // ID stack/scopes
@@ -262,10 +265,23 @@ public:
 /* Widgets / Trees */
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Trees", meta = (DevelopmentOnly))
+	static UPARAM(DisplayName = "bOpen") bool AddTreeNode(FString Label);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Trees", meta = (DevelopmentOnly))
 	static UPARAM(DisplayName = "bOpen") bool AddCollapsingHeader(FString Label);
 
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Trees", meta = (DevelopmentOnly))
+	static void SetNextItemOpen(bool bOpen = true, ImGui_WindowConditions Condition = Always);
+
 // Widgets: Selectables
-// Widgets: List Boxes
+/* Widgets / List Boxes	*/
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|List Boxes", meta = (DevelopmentOnly))
+	static UPARAM(DisplayName = "bOpen") bool StartPrintingListBox(FString Label, FVector2D Size);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|List Boxes", meta = (DevelopmentOnly))
+	static void StopPrintingListBox();
+
 // Widgets: Data Plotting
 // Widgets: Value() Helpers.
 

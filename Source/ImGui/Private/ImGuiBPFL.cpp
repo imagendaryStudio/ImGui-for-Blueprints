@@ -100,6 +100,11 @@ bool UImGuiBPFL::IsWindowFocused()
 	return ImGui::IsWindowFocused((ImGuiFocusedFlags)0);
 }
 
+bool UImGuiBPFL::IsWindowHovered()
+{
+	return ImGui::IsWindowHovered((ImGuiFocusedFlags)0);
+}
+
 FVector2D UImGuiBPFL::GetWindowPosition(bool bRelative)
 {
 	FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
@@ -209,6 +214,12 @@ void UImGuiBPFL::AddSpacing()
 	ImGui::Spacing();
 }
 
+void UImGuiBPFL::Indent(float ToRight)
+{
+	ImGui::Indent(ToRight);
+}
+
+
 void UImGuiBPFL::StartPrintingGroup()
 {
 	ImGui::BeginGroup();
@@ -218,6 +229,7 @@ void UImGuiBPFL::StopPrintingGroup()
 {
 	ImGui::EndGroup();
 }
+
 
 // ID stack/scopes
 
@@ -389,14 +401,39 @@ bool UImGuiBPFL::AddInputTextBox(FString Label, FString Hint, FString& InputedSt
 // Widgets: Color Editor/Picker (tip: the ColorEdit* functions have a little color square that can be left-clicked to open a picker, and right-clicked to open an option menu.)
 /* Widgets / Trees */
 
+bool UImGuiBPFL::AddTreeNode(FString Label)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+	return ImGui::TreeNode(LabelConverted);
+}
+
 bool UImGuiBPFL::AddCollapsingHeader(FString Label)
 {
 	char* LabelConverted = TCHAR_TO_ANSI(*Label);
 	return ImGui::CollapsingHeader(LabelConverted);
 }
 
+void UImGuiBPFL::SetNextItemOpen(bool bOpen, ImGui_WindowConditions Condition)
+{
+	ImGui::SetNextItemOpen(bOpen, Condition);
+}
+
 // Widgets: Selectables
-// Widgets: List Boxes
+/* Widgets / List Boxes	*/
+
+bool UImGuiBPFL::StartPrintingListBox(FString Label, FVector2D Size)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+	ImVec2 SizeConverted = GetScreenSizeInPixels(Size);
+
+	return ImGui::BeginListBox(LabelConverted, SizeConverted);
+}
+
+void UImGuiBPFL::StopPrintingListBox()
+{
+	ImGui::EndListBox();
+}
+
 // Widgets: Data Plotting
 // Widgets: Value() Helpers.
 /* Widgets / Menus */
@@ -494,14 +531,10 @@ void UImGuiBPFL::StopPrintingDisabled()
 
 void UImGuiBPFL::TestFunction()
 {
-	ImGui::Begin("Test Window", nullptr, ImGuiWindowFlags_AlwaysAutoResize);
+	ImGui::Begin("Test Window", nullptr);
 	static char teststring[] = "hello";
-	if (ImGui::InputTextExSafe("test input box", "test hint", teststring, 100, ImVec2(0, 0), ImGuiInputTextFlags_EnterReturnsTrue))
-	{
-		FString Message = "Inputed";
-		GEngine->AddOnScreenDebugMessage((int32)(GetTypeHash(Message)), 2, FColor::Red, Message);
-		UE_LOG(LogTemp, Error, TEXT("Inputed"))
-	}
+	ImGui::Text("hello");
+
 	ImGui::End();
 	//ImGui::InputText()
 }
