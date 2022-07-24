@@ -3,7 +3,7 @@
 
 #include "ImGuiBPFL.h"
 #include <imgui.h>
-
+#include "Misc/Optional.h"
 
 //Public
 // placeholders - test
@@ -54,15 +54,19 @@ void UImGuiBPFL::PrintSimpleWatermark(FString Name, FString Text, FVector2D Scre
 
 /* Windows */
 
-void UImGuiBPFL::StartPrintingMainWindow(FString Name, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties)
+bool UImGuiBPFL::StartPrintingMainWindow(FString Name, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties, bool bClosable, bool& bOpen)
 {
 	char* NameConverted = TCHAR_TO_ANSI(*Name);
+	ImGuiWindowFlags PropertiesConverted = 0;
+	bool* bOpenConverted = bClosable ? &bOpen : nullptr;
 
-	ImGuiWindowFlags Flags = 0;
-	for (ImGui_WindowFlags SimpleFlag : Properties)
-		Flags += GetFixedWidnowFlag(SimpleFlag);
+	for (ImGui_WindowFlags Flag : Properties)
+		PropertiesConverted += GetFixedWidnowFlag(Flag);
 
-	ImGui::Begin(NameConverted, nullptr, Flags);
+	if (!bClosable || bOpen)
+		return ImGui::Begin(NameConverted, bOpenConverted, PropertiesConverted);
+	else
+		return false;
 }
 
 void UImGuiBPFL::StopPrintingMainWindow()

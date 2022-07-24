@@ -5,8 +5,8 @@
 #include "CoreMinimal.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include <ImGui.h>
+#include "Misc/Optional.h"
 #include "ImGuiBPFL.generated.h"
-
 
 /* structs */
 
@@ -121,8 +121,8 @@ public:
 
 /* Windows */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Windows", meta = (DevelopmentOnly))
-	static void StartPrintingMainWindow(FString Name, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties);
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Windows", meta = (DevelopmentOnly, AutoCreateRefTerm = "bOpen", AdvancedDisplay = 2))
+	static UPARAM(DisplayName = "bOpen") bool StartPrintingMainWindow(FString Name, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties, bool bClosable, UPARAM(ref) bool& bOpen);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Windows", meta = (DevelopmentOnly))
 	static void StopPrintingMainWindow();
