@@ -54,7 +54,7 @@ void UImGuiBPFL::PrintSimpleWatermark(FString Name, FString Text, FVector2D Scre
 
 /* Windows */
 
-bool UImGuiBPFL::StartPrintingMainWindow(FString Name, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties, bool bClosable, bool& bOpen)
+bool UImGuiBPFL::BeginMainWindow(FString Name, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties, bool bClosable, bool& bOpen)
 {
 	char* NameConverted = TCHAR_TO_ANSI(*Name);
 	ImGuiWindowFlags PropertiesConverted = 0;
@@ -69,14 +69,14 @@ bool UImGuiBPFL::StartPrintingMainWindow(FString Name, TSet<TEnumAsByte<ImGui_Wi
 		return false;
 }
 
-void UImGuiBPFL::StopPrintingMainWindow()
+void UImGuiBPFL::EndMainWindow()
 {
 	ImGui::End();
 }
 
 /* Child Windows */
 
-bool UImGuiBPFL::StartPrintingChild(FString HashName, FVector2D Size, bool bBorder, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties)
+bool UImGuiBPFL::BeginChild(FString HashName, FVector2D Size, bool bBorder, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties)
 {
 	int HashId = GetTypeHash(HashName);
 	ImVec2 SizeInPixels = GetScreenSizeInPixels(Size);
@@ -87,7 +87,7 @@ bool UImGuiBPFL::StartPrintingChild(FString HashName, FVector2D Size, bool bBord
 	return ImGui::BeginChild(HashId, SizeInPixels, bBorder, Flags);
 }
 
-void UImGuiBPFL::StopPrintingChild()
+void UImGuiBPFL::EndChild()
 {
 	ImGui::EndChild();
 }
@@ -224,12 +224,12 @@ void UImGuiBPFL::Indent(float ToRight)
 }
 
 
-void UImGuiBPFL::StartPrintingGroup()
+void UImGuiBPFL::BeginGroup()
 {
 	ImGui::BeginGroup();
 }
 
-void UImGuiBPFL::StopPrintingGroup()
+void UImGuiBPFL::EndGroup()
 {
 	ImGui::EndGroup();
 }
@@ -299,7 +299,7 @@ void UImGuiBPFL::AddBullet()
 
 /* Widgets: Combo Box */
 
-bool UImGuiBPFL::StartPrintingCombo(FString Label, FString Preview)
+bool UImGuiBPFL::BeginCombo(FString Label, FString Preview)
 {
 	char* LabelConverted = TCHAR_TO_ANSI(*Label);
 	char* PreviewConverted = TCHAR_TO_ANSI(*Preview);
@@ -307,7 +307,7 @@ bool UImGuiBPFL::StartPrintingCombo(FString Label, FString Preview)
 	return ImGui::BeginCombo(LabelConverted, PreviewConverted);
 }
 
-void UImGuiBPFL::StopPrintingCombo()
+void UImGuiBPFL::EndCombo()
 {
 	ImGui::EndCombo();
 }
@@ -425,7 +425,7 @@ void UImGuiBPFL::SetNextItemOpen(bool bOpen, ImGui_WindowConditions Condition)
 // Widgets: Selectables
 /* Widgets / List Boxes	*/
 
-bool UImGuiBPFL::StartPrintingListBox(FString Label, FVector2D Size)
+bool UImGuiBPFL::BeginListBox(FString Label, FVector2D Size)
 {
 	char* LabelConverted = TCHAR_TO_ANSI(*Label);
 	ImVec2 SizeConverted = GetScreenSizeInPixels(Size);
@@ -433,7 +433,7 @@ bool UImGuiBPFL::StartPrintingListBox(FString Label, FVector2D Size)
 	return ImGui::BeginListBox(LabelConverted, SizeConverted);
 }
 
-void UImGuiBPFL::StopPrintingListBox()
+void UImGuiBPFL::EndListBox()
 {
 	ImGui::EndListBox();
 }
@@ -442,33 +442,33 @@ void UImGuiBPFL::StopPrintingListBox()
 // Widgets: Value() Helpers.
 /* Widgets / Menus */
 
-bool UImGuiBPFL::StartAddingToMenuBar()
+bool UImGuiBPFL::BeginAddingToMenuBar()
 {
 	return ImGui::BeginMenuBar();
 }
 
-void UImGuiBPFL::StopAddingToMenuBar()
+void UImGuiBPFL::EndAddingToMenuBar()
 {
 	ImGui::EndMenuBar();
 }
 
-bool UImGuiBPFL::StartPrintingMainMenuBar()
+bool UImGuiBPFL::BeginMainMenuBar()
 {
 	return ImGui::BeginMainMenuBar();
 }
 
-void UImGuiBPFL::StopPrintingMainMenuBar()
+void UImGuiBPFL::EndMainMenuBar()
 {
 	ImGui::EndMainMenuBar();
 }
 
-bool UImGuiBPFL::StartPrintingMenu(FString Label, bool bEnabled)
+bool UImGuiBPFL::BeginMenu(FString Label, bool bEnabled)
 {
 	char* LabelConverted = TCHAR_TO_ANSI(*Label);
 	return ImGui::BeginMenu(LabelConverted, bEnabled);
 }
 
-void UImGuiBPFL::StopPrintingMenu()
+void UImGuiBPFL::EndMenu()
 {
 	ImGui::EndMenu();
 }
@@ -482,12 +482,12 @@ bool UImGuiBPFL::AddMenuItem(FString Label, FString Shortcut, bool& bSelected, b
 
 /* Tooltips */
 
-void UImGuiBPFL::StartPrintingTooltip()
+void UImGuiBPFL::BeginTooltip()
 {
 	ImGui::BeginTooltip();
 }
 
-void UImGuiBPFL::StopPrintingTooltip()
+void UImGuiBPFL::EndTooltip()
 {
 	ImGui::EndTooltip();
 }
@@ -506,12 +506,12 @@ void UImGuiBPFL::StopPrintingTooltip()
 // Drag and Drop
 /* Disabling [BETA API] */
 
-void UImGuiBPFL::StartPrintingDisabled(bool bDisabled)
+void UImGuiBPFL::BeginDisabled(bool bDisabled)
 {
 	ImGui::BeginDisabled(bDisabled);
 }
 
-void UImGuiBPFL::StopPrintingDisabled()
+void UImGuiBPFL::EndDisabled()
 {
 	ImGui::EndDisabled();
 }
