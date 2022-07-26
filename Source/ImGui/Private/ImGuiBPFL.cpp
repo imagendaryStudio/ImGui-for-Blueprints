@@ -12,6 +12,7 @@ void UImGuiBPFL::PrintSimpleWindow(FString Name, FString Text, FVector2D ScreenP
 {;
 	char* NameConverted = TCHAR_TO_ANSI(*Name);
 	char* TextConverted = TCHAR_TO_ANSI(*Text);
+	//const char* TextConverted = StringCast<ANSICHAR>(*Text).Get(); //fixme: za du¿a tablica znaków powoduje, ¿e coœ siê psuje przy konwersji
 
 	UImGuiBPFL::SetNextWindowScreenPosition(ScreenPosition, Once);
 	ImGui::Begin(NameConverted, nullptr, ImGuiWindowFlags_AlwaysAutoResize + ImGuiWindowFlags_None);
@@ -223,7 +224,6 @@ void UImGuiBPFL::Indent(float ToRight)
 	ImGui::Indent(ToRight);
 }
 
-
 void UImGuiBPFL::BeginGroup()
 {
 	ImGui::BeginGroup();
@@ -233,7 +233,6 @@ void UImGuiBPFL::EndGroup()
 {
 	ImGui::EndGroup();
 }
-
 
 // ID stack/scopes
 
@@ -492,7 +491,63 @@ void UImGuiBPFL::EndTooltip()
 	ImGui::EndTooltip();
 }
 
-// Popups: begin/end functions
+/* Popups / begin/end functions */
+
+bool UImGuiBPFL::BeginPopup(FString HashName, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties)
+{
+	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
+	ImGuiWindowFlags PropertiesConverted = 0;
+
+	for (ImGui_WindowFlags Flag : Properties)
+		PropertiesConverted += GetFixedWidnowFlag(Flag);
+
+	return ImGui::BeginPopup(HashNameConverted, PropertiesConverted);
+}
+
+bool UImGuiBPFL::BeginPopupModal(FString Name, bool bClosable, bool& bOpenModal, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties)
+{
+	char* NameConverted = TCHAR_TO_ANSI(*Name);
+	bool* bOpenConverted = bClosable ? &bOpenModal : nullptr;
+	ImGuiWindowFlags PropertiesConverted = 0;
+
+	for (ImGui_WindowFlags Flag : Properties)
+		PropertiesConverted += GetFixedWidnowFlag(Flag);
+
+	return ImGui::BeginPopupModal(NameConverted, bOpenConverted, PropertiesConverted);
+}
+
+void UImGuiBPFL::EndPopup()
+{
+	ImGui::EndPopup();
+}
+
+void UImGuiBPFL::OpenPopup(FString HashName)
+{
+	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
+
+	if (!ImGui::IsPopupOpen(HashNameConverted))
+	{
+		ImGui::OpenPopup(HashNameConverted, 0);
+	}
+}
+
+void UImGuiBPFL::ClosePopup(FString HashName)
+{
+	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
+
+	if (ImGui::IsPopupOpen(HashNameConverted, 0))
+	{
+		ImGui::CloseCurrentPopup();
+	}
+}
+
+bool UImGuiBPFL::IsPopupOpen(FString HashName)
+{
+	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
+
+	return ImGui::IsPopupOpen(HashNameConverted, 0);
+}
+
 // Popups: open/close functions
 // Popups: open+begin combined functions helpers
 // Popups: query functions
@@ -535,12 +590,7 @@ void UImGuiBPFL::EndDisabled()
 
 void UImGuiBPFL::TestFunction()
 {
-	ImGui::Begin("Test Window", nullptr);
-	static char teststring[] = "hello";
-	ImGui::Text("hello");
-
-	ImGui::End();
-	//ImGui::InputText()
+	//ImGui::StyleColorsClassic();
 }
 
 //Private

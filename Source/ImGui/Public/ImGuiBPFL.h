@@ -316,7 +316,26 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tooltips")
 	static void EndTooltip();
 
-// Popups: begin/end functions
+/* Popups / begin/end functions */
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Popups")
+	static UPARAM(DisplayName = "bOpen") bool BeginPopup(FString HashName, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Popups", meta = (AutoCreateRefTerm = "bOpenModal"))
+	static UPARAM(DisplayName = "bOpen") bool BeginPopupModal(FString Name, bool bClosable, UPARAM(ref) bool& bOpenModal, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Popups")
+	static void EndPopup();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Popups")
+	static void OpenPopup(FString HashName);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Popups")
+	static void ClosePopup(FString HashName);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Popups", BlueprintPure)
+	static bool IsPopupOpen(FString HashName);
+
 // Popups: open/close functions
 // Popups: open+begin combined functions helpers
 // Popups: query functions
