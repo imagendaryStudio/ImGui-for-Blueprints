@@ -499,7 +499,9 @@ bool UImGuiBPFL::BeginPopup(FString HashName, TSet<TEnumAsByte<ImGui_WindowFlags
 	ImGuiWindowFlags PropertiesConverted = 0;
 
 	for (ImGui_WindowFlags Flag : Properties)
+	{
 		PropertiesConverted += GetFixedWidnowFlag(Flag);
+	}
 
 	return ImGui::BeginPopup(HashNameConverted, PropertiesConverted);
 }
@@ -511,7 +513,9 @@ bool UImGuiBPFL::BeginPopupModal(FString Name, bool bClosable, bool& bOpenModal,
 	ImGuiWindowFlags PropertiesConverted = 0;
 
 	for (ImGui_WindowFlags Flag : Properties)
+	{
 		PropertiesConverted += GetFixedWidnowFlag(Flag);
+	}
 
 	return ImGui::BeginPopupModal(NameConverted, bOpenConverted, PropertiesConverted);
 }
@@ -525,20 +529,15 @@ void UImGuiBPFL::OpenPopup(FString HashName)
 {
 	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
 
-	if (!ImGui::IsPopupOpen(HashNameConverted))
+	if (!ImGui::IsMouseDown(ImGuiMouseButton_Left))	 //TEMP, FIXME
 	{
 		ImGui::OpenPopup(HashNameConverted, 0);
 	}
 }
 
-void UImGuiBPFL::ClosePopup(FString HashName)
+void UImGuiBPFL::CloseCurrentPopup()
 {
-	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
-
-	if (ImGui::IsPopupOpen(HashNameConverted, 0))
-	{
-		ImGui::CloseCurrentPopup();
-	}
+	ImGui::CloseCurrentPopup();
 }
 
 bool UImGuiBPFL::IsPopupOpen(FString HashName)

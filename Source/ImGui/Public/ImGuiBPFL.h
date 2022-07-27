@@ -331,7 +331,7 @@ public:
 	static void OpenPopup(FString HashName);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Popups")
-	static void ClosePopup(FString HashName);
+	static void CloseCurrentPopup();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|Popups", BlueprintPure)
 	static bool IsPopupOpen(FString HashName);
