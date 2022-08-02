@@ -6,6 +6,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include <ImGui.h>
 #include "Misc/Optional.h"
+#include "K2Node_MacroInstance.h"
 #include "ImGuiBPFL.generated.h"
 
 /* structs */
@@ -92,7 +93,7 @@ enum ImGui_InputTextType
 
 
 UCLASS()
-class IMGUI_API UImGuiBPFL : public UBlueprintFunctionLibrary
+class IMGUI_API UImGuiBPFL : public UBlueprintFunctionLibrary //, public UK2Node_MacroInstance
 {
 	GENERATED_BODY()
 
@@ -273,7 +274,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Trees")
 	static void SetNextItemOpen(bool bOpen = true, ImGui_WindowConditions Condition = Always);
 
-// Widgets: Selectables
+/* Widgets / Selectables */
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Selectables", meta = (AutoCreateRefTerm = "bSelected"))
+	static UPARAM(DisplayName = "bSelected") bool Selectable(FString Label, UPARAM(ref) bool& bSelected, FVector2D Size);
+
 /* Widgets / List Boxes	*/
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|List Boxes")
@@ -339,7 +344,24 @@ public:
 // Popups: open/close functions
 // Popups: open+begin combined functions helpers
 // Popups: query functions
-// Tables
+
+/* Tables */
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tables")
+	static UPARAM(DisplayName = "bOpen") bool BeginTable(FString HashName, int Column, FVector2D OuterSize, float InnerWidth);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tables")
+	static void EndTable();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tables")
+	static void TableNextRow(float MinRowHeight);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tables")
+	static UPARAM(DisplayName = "bVisible") bool TableNextColumn();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tables")
+	static UPARAM(DisplayName = "bVisible") bool TableSetColumnIndex(int Column);
+
 // Tables: Headers & Columns declaration
 // Tables: Sorting
 // Tables: Miscellaneous functions

@@ -421,7 +421,17 @@ void UImGuiBPFL::SetNextItemOpen(bool bOpen, ImGui_WindowConditions Condition)
 	ImGui::SetNextItemOpen(bOpen, Condition);
 }
 
-// Widgets: Selectables
+/* Widgets / Selectables */
+
+bool UImGuiBPFL::Selectable(FString Label, bool& bSelected, FVector2D Size)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+	ImVec2 SizeConverted = GetScreenSizeInPixels(Size);
+
+	bSelected = ImGui::Selectable(LabelConverted, &bSelected, 0, SizeConverted);
+	return bSelected;
+}
+
 /* Widgets / List Boxes	*/
 
 bool UImGuiBPFL::BeginListBox(FString Label, FVector2D Size)
@@ -550,7 +560,36 @@ bool UImGuiBPFL::IsPopupOpen(FString HashName)
 // Popups: open/close functions
 // Popups: open+begin combined functions helpers
 // Popups: query functions
-// Tables
+/* Tables */
+
+bool UImGuiBPFL::BeginTable(FString HashName, int Column, FVector2D OuterSize, float InnerWidth)
+{
+	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
+	ImVec2 OuterSizeConverted = GetScreenSizeInPixels(OuterSize);
+
+	return ImGui::BeginTable(HashNameConverted, Column, 0, OuterSizeConverted, InnerWidth);
+}
+
+void UImGuiBPFL::EndTable()
+{
+	ImGui::EndTable();
+}
+
+void UImGuiBPFL::TableNextRow(float MinRowHeight)
+{
+	ImGui::TableNextRow(0, MinRowHeight);
+}
+
+bool UImGuiBPFL::TableNextColumn()
+{
+	return ImGui::TableNextColumn();
+}
+
+bool UImGuiBPFL::TableSetColumnIndex(int Column)
+{
+	return ImGui::TableSetColumnIndex(Column);
+}
+
 // Tables: Headers & Columns declaration
 // Tables: Sorting
 // Tables: Miscellaneous functions
