@@ -277,7 +277,7 @@ public:
 /* Widgets / Selectables */
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Selectables", meta = (AutoCreateRefTerm = "bSelected"))
-	static UPARAM(DisplayName = "bSelected") bool Selectable(FString Label, UPARAM(ref) bool& bSelected, FVector2D Size);
+	static UPARAM(DisplayName = "bClicked") bool Selectable(FString Label, UPARAM(ref) bool& bSelected, FVector2D Size);
 
 /* Widgets / List Boxes	*/
 
@@ -362,11 +362,27 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tables")
 	static UPARAM(DisplayName = "bVisible") bool TableSetColumnIndex(int Column);
 
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tables")
+	static void TableHeader(FString Label);
+
 // Tables: Headers & Columns declaration
 // Tables: Sorting
 // Tables: Miscellaneous functions
 // Legacy Columns API (prefer using Tables!)
-// Tab Bars, Tabs
+/* Tab Bars, Tabs */
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tab Bars, Tabs")
+	static UPARAM(DisplayName = "bVisible") bool BeginTabBar(FString HashName);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tab Bars, Tabs")
+	static void EndTabBar();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tab Bars, Tabs", meta = (AutoCreateRefTerm = "bOpen"))
+	static UPARAM(DisplayName = "bSelected") bool BeginTabItem(FString Label, bool bClosable, UPARAM(ref) bool& bOpen);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tab Bars, Tabs")
+	static void EndTabItem();
+
 // Logging/Capture
 // Drag and Drop
 /* Disabling [BETA API] */

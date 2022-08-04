@@ -428,8 +428,7 @@ bool UImGuiBPFL::Selectable(FString Label, bool& bSelected, FVector2D Size)
 	char* LabelConverted = TCHAR_TO_ANSI(*Label);
 	ImVec2 SizeConverted = GetScreenSizeInPixels(Size);
 
-	bSelected = ImGui::Selectable(LabelConverted, &bSelected, 0, SizeConverted);
-	return bSelected;
+	return ImGui::Selectable(LabelConverted, &bSelected, 0, SizeConverted);
 }
 
 /* Widgets / List Boxes	*/
@@ -590,11 +589,46 @@ bool UImGuiBPFL::TableSetColumnIndex(int Column)
 	return ImGui::TableSetColumnIndex(Column);
 }
 
+void UImGuiBPFL::TableHeader(FString Label)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+
+	ImGui::TableHeader(LabelConverted);
+}
+
 // Tables: Headers & Columns declaration
 // Tables: Sorting
 // Tables: Miscellaneous functions
 // Legacy Columns API (prefer using Tables!)
-// Tab Bars, Tabs
+/* Tab Bars, Tabs */
+
+bool UImGuiBPFL::BeginTabBar(FString HashName)
+{
+	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
+
+	return ImGui::BeginTabBar(HashNameConverted);
+}
+
+void UImGuiBPFL::EndTabBar()
+{
+	ImGui::EndTabBar();
+}
+
+bool UImGuiBPFL::BeginTabItem(FString Label, bool bClosable, bool& bOpen)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+	bool* bOpenConverted = bClosable ? &bOpen : nullptr;
+
+	return ImGui::BeginTabItem(LabelConverted, bOpenConverted);
+}
+
+void UImGuiBPFL::EndTabItem()
+{
+	ImGui::EndTabItem();
+}
+
+
+
 // Logging/Capture
 // Drag and Drop
 /* Disabling [BETA API] */
