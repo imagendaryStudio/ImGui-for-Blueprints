@@ -627,10 +627,64 @@ void UImGuiBPFL::EndTabItem()
 	ImGui::EndTabItem();
 }
 
+bool UImGuiBPFL::TabItemButton(FString Label)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+
+	return ImGui::TabItemButton(LabelConverted, 0);
+}
+
+void UImGuiBPFL::SetNextTabItemClosed(FString Label)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+
+	ImGui::SetTabItemClosed(LabelConverted);
+}
+
 
 
 // Logging/Capture
-// Drag and Drop
+
+/* Drag and Drop */
+
+bool UImGuiBPFL::BeginDragDropSource()
+{
+	return ImGui::BeginDragDropSource(0);
+}
+
+bool UImGuiBPFL::SetDragDropPayload(FString HashName)
+{
+	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
+
+	return ImGui::SetDragDropPayload(HashNameConverted, nullptr, 0);
+}
+
+void UImGuiBPFL::EndDragDropSource()
+{
+	ImGui::EndDragDropSource();
+}
+
+bool UImGuiBPFL::BeginDragDropTarget()
+{
+	return ImGui::BeginDragDropTarget();
+}
+
+bool UImGuiBPFL::AcceptDragDropPayload(FString HashName)
+{
+	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
+	const ImGuiPayload* Payload;
+
+	Payload = ImGui::AcceptDragDropPayload(HashNameConverted, 0);
+	return Payload ? true : false;
+}
+
+void UImGuiBPFL::EndDragDropTarget()
+{
+	ImGui::EndDragDropTarget();
+}
+
+
+
 /* Disabling [BETA API] */
 
 void UImGuiBPFL::BeginDisabled(bool bDisabled)

@@ -383,8 +383,35 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tab Bars, Tabs")
 	static void EndTabItem();
 
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tab Bars, Tabs")
+	static UPARAM(DisplayName = "bClicked") bool TabItemButton(FString Label);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tab Bars, Tabs")
+	static void SetNextTabItemClosed(FString Label);
+
+
 // Logging/Capture
-// Drag and Drop
+
+/* Drag and Drop */
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Drag and Drop")
+	static bool BeginDragDropSource();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Drag and Drop")
+	static bool SetDragDropPayload(FString HashName);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Drag and Drop")
+	static void EndDragDropSource();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Drag and Drop")
+	static bool BeginDragDropTarget();
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Drag and Drop")
+	static bool AcceptDragDropPayload(FString HashName);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Drag and Drop")
+	static void EndDragDropTarget();
+
 /* Disabling [BETA API] */
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Disabling")
