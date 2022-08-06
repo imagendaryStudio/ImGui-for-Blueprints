@@ -219,6 +219,13 @@ void UImGuiBPFL::AddSpacing()
 	ImGui::Spacing();
 }
 
+void UImGuiBPFL::AddDummy(FVector2D Size)
+{
+	ImVec2 SizeInPixels = GetScreenSizeInPixels(Size);
+
+	ImGui::Dummy(SizeInPixels);
+}
+
 void UImGuiBPFL::Indent(float ToRight)
 {
 	ImGui::Indent(ToRight);
@@ -247,12 +254,19 @@ void UImGuiBPFL::AddText(FString Text)
 
 /* Widgets / Main */
 
-bool UImGuiBPFL::AddButton(FString Name, FVector2D Size)
+bool UImGuiBPFL::AddButton(FString Label, FVector2D Size)
 {
-	char* NameConverted = TCHAR_TO_ANSI(*Name);
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
 	ImVec2 SizeInPixels = GetScreenSizeInPixels(Size);
 
-	return ImGui::Button(NameConverted, SizeInPixels);
+	return ImGui::Button(LabelConverted, SizeInPixels);
+}
+
+bool UImGuiBPFL::SmallButton(FString Label)
+{
+	char* LabelConverted = TCHAR_TO_ANSI(*Label);
+
+	return ImGui::SmallButton(LabelConverted);
 }
 
 bool UImGuiBPFL::AddInvisibleButton(FString HashName, FVector2D Size)
@@ -261,6 +275,13 @@ bool UImGuiBPFL::AddInvisibleButton(FString HashName, FVector2D Size)
 	ImVec2 SizeInPixels = GetScreenSizeInPixels(Size);
 
 	return ImGui::InvisibleButton(HashNameConverted, SizeInPixels);
+}
+
+bool UImGuiBPFL::ArrowButton(FString HashName, ImGui_DirType Direction)
+{
+	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
+
+	return ImGui::ArrowButton(HashNameConverted, Direction - 1);
 }
 
 bool UImGuiBPFL::AddCheckbox(FString Label, bool& CheckedBool)

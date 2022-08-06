@@ -90,6 +90,16 @@ enum ImGui_InputTextType
 	//not-needed																//ImGuiInputTextFlags_CallbackEdit        // Callback on any edit (note that InputText() already returns true on edit, the callback is useful mainly to manipulate the underlying buffer while focus is active)
 };
 
+UENUM(BlueprintType)
+enum ImGui_DirType
+{
+	DirType_None = 0				UMETA(DisplayName = "None"),
+	DirType_Left = 1				UMETA(DisplayName = "Left"),
+	DirType_Right = 2				UMETA(DisplayName = "Right"),
+	DirType_Up = 3					UMETA(DisplayName = "Up"),
+	DirType_Down = 4				UMETA(DisplayName = "Down")
+};
+
 
 
 UCLASS()
@@ -122,7 +132,7 @@ public:
 
 /* Windows */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Windows", meta = (AutoCreateRefTerm = "bOpen", AdvancedDisplay = 2))
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Windows", meta = (AutoCreateRefTerm = "Properties, bOpen", AdvancedDisplay = 2))
 	static UPARAM(DisplayName = "bOpen") bool BeginMainWindow(FString Name, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties, bool bClosable, UPARAM(ref) bool& bOpen);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Windows")
@@ -197,12 +207,15 @@ public:
 	static void AddSpacing();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|Cursor|Layout")
+	static void AddDummy(FVector2D Size);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Cursor|Layout")
 	static void Indent(float ToRight = 0);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|Cursor|Layout")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Cursor|Layout")
 	static void BeginGroup();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|Cursor|Layout")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Cursor|Layout")
 	static void EndGroup();
 
 // ID stack/scopes
@@ -215,10 +228,16 @@ public:
 /* Widgets / Main */
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")
-	static UPARAM(DisplayName = "bClicked") bool AddButton(FString Name, FVector2D Size);
+	static UPARAM(DisplayName = "bClicked") bool AddButton(FString Label, FVector2D Size);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")
+	static UPARAM(DisplayName = "bClicked") bool SmallButton(FString Label);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")
 	static UPARAM(DisplayName = "bClicked") bool AddInvisibleButton(FString HashName, FVector2D Size);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")
+	static UPARAM(DisplayName = "bClicked") bool ArrowButton(FString HashName, ImGui_DirType Direction);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")
 	static UPARAM(DisplayName = "bChanged") bool AddCheckbox(FString Label, UPARAM(ref) bool& CheckedBool);
