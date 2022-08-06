@@ -6,7 +6,6 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include <ImGui.h>
 #include "Misc/Optional.h"
-#include "K2Node_MacroInstance.h"
 #include "ImGuiBPFL.generated.h"
 
 /* structs */
