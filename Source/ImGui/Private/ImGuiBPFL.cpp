@@ -5,25 +5,21 @@
 #include <imgui.h>
 #include "Misc/Optional.h"
 
+#define MISSING_FLAG 0
+
 //Public
 // placeholders - test
 
 void UImGuiBPFL::PrintSimpleWindow(FString Name, FString Text, FVector2D ScreenPosition)
-{;
-	char* NameConverted = TCHAR_TO_ANSI(*Name);
-	char* TextConverted = TCHAR_TO_ANSI(*Text);
-	//const char* TextConverted = StringCast<ANSICHAR>(*Text).Get(); //fixme: za du¿a tablica znaków powoduje, ¿e coœ siê psuje przy konwersji
-
+{
 	UImGuiBPFL::SetNextWindowScreenPosition(ScreenPosition, Once);
-	ImGui::Begin(NameConverted, nullptr, ImGuiWindowFlags_AlwaysAutoResize + ImGuiWindowFlags_None);
-	ImGui::Text(TextConverted);
+	ImGui::Begin(TCHAR_TO_ANSI(*Name), nullptr, ImGuiWindowFlags_AlwaysAutoResize + ImGuiWindowFlags_None);
+	ImGui::Text(TCHAR_TO_ANSI(*Text));
 	ImGui::End();
 }
 
 void UImGuiBPFL::PrintSimpleWatermark(FString Name, FString Text, FVector2D ScreenPosition, bool bPrintTextOnly, float BackgroundAlpha)
 {	
-	char* NameConverted = TCHAR_TO_ANSI(*Name);
-	char* TextConverted = TCHAR_TO_ANSI(*Text);
 	auto flags =
 			ImGuiWindowFlags_AlwaysAutoResize +
 			ImGuiWindowFlags_NoCollapse +
@@ -32,13 +28,16 @@ void UImGuiBPFL::PrintSimpleWatermark(FString Name, FString Text, FVector2D Scre
 			ImGuiWindowFlags_NoNav +
 			ImGuiWindowFlags_NoMove +
 			ImGuiWindowFlags_None;
+
 	if (bPrintTextOnly)
+	{
 		flags += ImGuiWindowFlags_NoTitleBar;
+	}
 
 	UImGuiBPFL::SetNextWindowScreenPosition(ScreenPosition, Always);
 	ImGui::SetNextWindowBgAlpha(BackgroundAlpha);	
-	ImGui::Begin(NameConverted, nullptr, flags);
-	ImGui::Text(TextConverted);
+	ImGui::Begin(TCHAR_TO_ANSI(*Name), nullptr, flags);
+	ImGui::Text(TCHAR_TO_ANSI(*Text));
 	ImGui::End();
 }
 
@@ -57,17 +56,22 @@ void UImGuiBPFL::PrintSimpleWatermark(FString Name, FString Text, FVector2D Scre
 
 bool UImGuiBPFL::BeginMainWindow(FString Name, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties, bool bClosable, bool& bOpen)
 {
-	char* NameConverted = TCHAR_TO_ANSI(*Name);
 	ImGuiWindowFlags PropertiesConverted = 0;
 	bool* bOpenConverted = bClosable ? &bOpen : nullptr;
 
 	for (ImGui_WindowFlags Flag : Properties)
+	{
 		PropertiesConverted += GetFixedWidnowFlag(Flag);
+	}
 
 	if (!bClosable || bOpen)
-		return ImGui::Begin(NameConverted, bOpenConverted, PropertiesConverted);
+	{
+		return ImGui::Begin(TCHAR_TO_ANSI(*Name), bOpenConverted, PropertiesConverted);
+	}
 	else
+	{
 		return false;
+	}
 }
 
 void UImGuiBPFL::EndMainWindow()
@@ -82,8 +86,11 @@ bool UImGuiBPFL::BeginChild(FString HashName, FVector2D Size, bool bBorder, TSet
 	int HashId = GetTypeHash(HashName);
 	ImVec2 SizeInPixels = GetScreenSizeInPixels(Size);
 	ImGuiWindowFlags Flags = 0;
+
 	for (ImGui_WindowFlags SimpleFlag : Properties)
+	{
 		Flags += GetFixedWidnowFlag(SimpleFlag);
+	}
 
 	return ImGui::BeginChild(HashId, SizeInPixels, bBorder, Flags);
 }
@@ -102,12 +109,12 @@ bool UImGuiBPFL::IsWindowCollapsed()
 
 bool UImGuiBPFL::IsWindowFocused()
 {
-	return ImGui::IsWindowFocused((ImGuiFocusedFlags)0);
+	return ImGui::IsWindowFocused(MISSING_FLAG);
 }
 
 bool UImGuiBPFL::IsWindowHovered()
 {
-	return ImGui::IsWindowHovered((ImGuiFocusedFlags)0);
+	return ImGui::IsWindowHovered(MISSING_FLAG);
 }
 
 FVector2D UImGuiBPFL::GetWindowPosition(bool bRelative)
@@ -145,7 +152,9 @@ void UImGuiBPFL::SetNextWindowScreenPosition(FVector2D ScreenPosition, ImGui_Win
 	ImVec2 WindowPivot = GetRelativeScreenPosition(ScreenPosition);
 
 	if (ViewportSize.X > 0 && ViewportSize.Y > 0)	// don't call when viewport is just begin created
+	{
 		ImGui::SetNextWindowPos(WindowPosition, Condition, WindowPivot);
+	}
 }
 
 void UImGuiBPFL::SetNextWindowSize(FVector2D Size, ImGui_WindowConditions Condition)
@@ -154,7 +163,9 @@ void UImGuiBPFL::SetNextWindowSize(FVector2D Size, ImGui_WindowConditions Condit
 	ImVec2 SizeConverted = GetScreenSizeInPixels(Size);
 
 	if (ViewportSize.X > 0 && ViewportSize.Y > 0)	 // don't call when viewport is just begin created
+	{
 		ImGui::SetNextWindowSize(SizeConverted, Condition);
+	}
 }
 
 void UImGuiBPFL::SetNextWindowSizeConstraints(FVector2D SizeMin, FVector2D SizeMax)
@@ -164,7 +175,9 @@ void UImGuiBPFL::SetNextWindowSizeConstraints(FVector2D SizeMin, FVector2D SizeM
 	ImVec2 SizeMaxConverted = GetScreenSizeInPixels(SizeMax);
 
 	if (ViewportSize.X > 0 && ViewportSize.Y > 0)	 // don't call when viewport is just begin created
+	{
 		ImGui::SetNextWindowSizeConstraints(SizeMinConverted, SizeMaxConverted);
+	}
 }
 
 void UImGuiBPFL::SetNextWindowContentSize(FVector2D Size)
@@ -173,7 +186,9 @@ void UImGuiBPFL::SetNextWindowContentSize(FVector2D Size)
 	ImVec2 SizeConverted = GetScreenSizeInPixels(Size);;
 
 	if (ViewportSize.X > 0 && ViewportSize.Y > 0)	 // don't call when viewport is just begin created
+	{
 		ImGui::SetNextWindowContentSize(SizeConverted);
+	}
 }
 
 void UImGuiBPFL::SetNextWindowCollapsed(bool bCollapsed, ImGui_WindowConditions Condition)
@@ -248,64 +263,56 @@ void UImGuiBPFL::EndGroup()
 
 void UImGuiBPFL::AddText(FString Text)
 {
-	char* TextConverted = TCHAR_TO_ANSI(*Text);
-	ImGui::Text(TextConverted);
+	ImGui::Text(TCHAR_TO_ANSI(*Text));
 }
 
 /* Widgets / Main */
 
-bool UImGuiBPFL::AddButton(FString Label, FVector2D Size)
+bool UImGuiBPFL::Button(FString Label, FVector2D Size)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
 	ImVec2 SizeInPixels = GetScreenSizeInPixels(Size);
 
-	return ImGui::Button(LabelConverted, SizeInPixels);
+	return ImGui::Button(TCHAR_TO_ANSI(*Label), SizeInPixels);
 }
 
 bool UImGuiBPFL::SmallButton(FString Label)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
-
-	return ImGui::SmallButton(LabelConverted);
+	return ImGui::SmallButton(TCHAR_TO_ANSI(*Label));
 }
 
-bool UImGuiBPFL::AddInvisibleButton(FString HashName, FVector2D Size)
+bool UImGuiBPFL::InvisibleButton(FString HashName, FVector2D Size)
 {
-	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
 	ImVec2 SizeInPixels = GetScreenSizeInPixels(Size);
 
-	return ImGui::InvisibleButton(HashNameConverted, SizeInPixels);
+	return ImGui::InvisibleButton(TCHAR_TO_ANSI(*HashName), SizeInPixels);
 }
 
 bool UImGuiBPFL::ArrowButton(FString HashName, ImGui_DirType Direction)
 {
-	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
-
-	return ImGui::ArrowButton(HashNameConverted, Direction - 1);
+	return ImGui::ArrowButton(TCHAR_TO_ANSI(*HashName), Direction - 1);
 }
 
-bool UImGuiBPFL::AddCheckbox(FString Label, bool& CheckedBool)
+bool UImGuiBPFL::Checkbox(FString Label, bool& CheckedBool)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
-	return ImGui::Checkbox(LabelConverted, &CheckedBool);
+	return ImGui::Checkbox(TCHAR_TO_ANSI(*Label), &CheckedBool);
 }
 
-bool UImGuiBPFL::AddRadioButton(FString Label, bool bActive)
+bool UImGuiBPFL::RadioButton(FString Label, bool bActive)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
-	return ImGui::RadioButton(LabelConverted, bActive);
+	return ImGui::RadioButton(TCHAR_TO_ANSI(*Label), bActive);
 }
 
-bool UImGuiBPFL::AddRadioButtonList(TSet<FString> Labels, int& RadioedIntiger)
+bool UImGuiBPFL::RadioButtonList(TSet<FString> Labels, int& RadioedIntiger)
 {
 	bool bRadioedIntigerChanged = false;
 	int LabelIterator = 0;
 
 	for (FString label : Labels)
 	{
-		char* labelConverted = TCHAR_TO_ANSI(*label);
-		if (ImGui::RadioButton(labelConverted, &RadioedIntiger, LabelIterator))
+		if (ImGui::RadioButton(TCHAR_TO_ANSI(*label), &RadioedIntiger, LabelIterator))
+		{
 			bRadioedIntigerChanged = true; // this must be changed it branch, otherwise other buttons will set bRadioedIntigerChanged back to false
+		}
 		LabelIterator++;
 	}
 
@@ -314,10 +321,13 @@ bool UImGuiBPFL::AddRadioButtonList(TSet<FString> Labels, int& RadioedIntiger)
 
 void UImGuiBPFL::AddProgressBar(float Fraction, FVector2D Size, FString Overlay)
 {
-	char* OverlayConverted = Overlay.IsEmpty() ? nullptr : TCHAR_TO_ANSI(*Overlay);
 	ImVec2 SizeInPixels = GetScreenSizeInPixels(Size);
 
-	ImGui::ProgressBar(Fraction, SizeInPixels, OverlayConverted);
+	ImGui::ProgressBar(
+		Fraction,
+		SizeInPixels,
+		Overlay.IsEmpty() ? nullptr : TCHAR_TO_ANSI(*Overlay)
+	);
 }
 
 void UImGuiBPFL::AddBullet()
@@ -329,10 +339,7 @@ void UImGuiBPFL::AddBullet()
 
 bool UImGuiBPFL::BeginCombo(FString Label, FString Preview)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
-	char* PreviewConverted = TCHAR_TO_ANSI(*Preview);
-
-	return ImGui::BeginCombo(LabelConverted, PreviewConverted);
+	return ImGui::BeginCombo(TCHAR_TO_ANSI(*Label), TCHAR_TO_ANSI(*Preview));
 }
 
 void UImGuiBPFL::EndCombo()
@@ -342,35 +349,40 @@ void UImGuiBPFL::EndCombo()
 
 // Widgets: Drag Sliders
 
-bool UImGuiBPFL::AddDragFloatArray(FString Label, UPARAM(ref) TArray<float>& DraggedArrayReference, float DragSpeed, float MinValue, float MaxValue)
+bool UImGuiBPFL::AddDragFloatArray(FString Label, TArray<float>& DraggedArrayReference, float DragSpeed, float MinValue, float MaxValue)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
 	int ItemsAmount = DraggedArrayReference.Num();
 	float* PassByRefArray = new float[ItemsAmount];
 	for (int i = 0; i < ItemsAmount; i++)
+	{
 		PassByRefArray[i] = DraggedArrayReference[i];
-
+	}
 	
-	bool bChanged = ImGui::DragScalarN(LabelConverted, ImGuiDataType_Float, PassByRefArray, ItemsAmount, DragSpeed, &MinValue, &MaxValue);
+	bool bChanged = ImGui::DragScalarN(TCHAR_TO_ANSI(*Label), ImGuiDataType_Float, PassByRefArray, ItemsAmount, DragSpeed, &MinValue, &MaxValue);
 	for (int i = 0; i < ItemsAmount; i++)
+	{
 		DraggedArrayReference[i] = PassByRefArray[i];
+	}
 
 	delete[] PassByRefArray;
 	return bChanged;
 }
 
-bool UImGuiBPFL::AddDragIntArray(FString Label, UPARAM(ref) TArray<int>& DraggedArrayReference, float DragSpeed, int MinValue, int MaxValue)
+bool UImGuiBPFL::AddDragIntArray(FString Label, TArray<int>& DraggedArrayReference, float DragSpeed, int MinValue, int MaxValue)
 {
 
 	int ItemsAmount = DraggedArrayReference.Num();
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
 	int* PassByRefArray = new int[ItemsAmount];
 	for (int i = 0; i < ItemsAmount; i++)
+	{
 		PassByRefArray[i] = DraggedArrayReference[i];
-	
-	bool bChanged = ImGui::DragScalarN(LabelConverted, ImGuiDataType_S32, PassByRefArray, ItemsAmount, DragSpeed, &MinValue, &MaxValue);
+	}
+
+	bool bChanged = ImGui::DragScalarN(TCHAR_TO_ANSI(*Label), ImGuiDataType_S32, PassByRefArray, ItemsAmount, DragSpeed, &MinValue, &MaxValue);
 	for (int i = 0; i < ItemsAmount; i++)
+	{
 		DraggedArrayReference[i] = PassByRefArray[i];
+	}
 
 	delete[] PassByRefArray;
 	return bChanged;
@@ -378,34 +390,39 @@ bool UImGuiBPFL::AddDragIntArray(FString Label, UPARAM(ref) TArray<int>& Dragged
 
 /* Widgets / Regular Sliders */
 
-bool UImGuiBPFL::AddSliderFloatArray(FString Label, UPARAM(ref) TArray<float>& SlidedArrayReference, float MinValue, float MaxValue)
+bool UImGuiBPFL::AddSliderFloatArray(FString Label, TArray<float>& SlidedArrayReference, float MinValue, float MaxValue)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
 	int ItemsAmount = SlidedArrayReference.Num();
 	float* PassByRefArray = new float[ItemsAmount];
 	for (int i = 0; i < ItemsAmount; i++)
+	{
 		PassByRefArray[i] = SlidedArrayReference[i];
+	}
 
-
-	bool bChanged = ImGui::SliderScalarN(LabelConverted, ImGuiDataType_Float, PassByRefArray, ItemsAmount, &MinValue, &MaxValue);
+	bool bChanged = ImGui::SliderScalarN(TCHAR_TO_ANSI(*Label), ImGuiDataType_Float, PassByRefArray, ItemsAmount, &MinValue, &MaxValue);
 	for (int i = 0; i < ItemsAmount; i++)
+	{
 		SlidedArrayReference[i] = PassByRefArray[i];
+	}
 
 	delete[] PassByRefArray;
 	return bChanged;
 }
 
-bool UImGuiBPFL::AddSliderIntArray(FString Label, UPARAM(ref) TArray<int>& SlidedArrayReference, int MinValue, int MaxValue)
+bool UImGuiBPFL::AddSliderIntArray(FString Label, TArray<int>& SlidedArrayReference, int MinValue, int MaxValue)
 {
 	int ItemsAmount = SlidedArrayReference.Num();
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
 	int* PassByRefArray = new int[ItemsAmount];
 	for (int i = 0; i < ItemsAmount; i++)
+	{
 		PassByRefArray[i] = SlidedArrayReference[i];
+	}
 
-	bool bChanged = ImGui::SliderScalarN(LabelConverted, ImGuiDataType_S32, PassByRefArray, ItemsAmount, &MinValue, &MaxValue);
+	bool bChanged = ImGui::SliderScalarN(TCHAR_TO_ANSI(*Label), ImGuiDataType_S32, PassByRefArray, ItemsAmount, &MinValue, &MaxValue);
 	for (int i = 0; i < ItemsAmount; i++)
+	{
 		SlidedArrayReference[i] = PassByRefArray[i];
+	}
 
 	delete[] PassByRefArray;
 	return bChanged;
@@ -413,18 +430,18 @@ bool UImGuiBPFL::AddSliderIntArray(FString Label, UPARAM(ref) TArray<int>& Slide
 
 /* Widgets: Input with Keyboard	*/
 
-bool UImGuiBPFL::AddInputTextBox(FString Label, FString Hint, FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, TSet<TEnumAsByte<ImGui_InputTextType>> Properties)
+bool UImGuiBPFL::InputTextBox(FString Label, FString Hint, FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, TSet<TEnumAsByte<ImGui_InputTextType>> Properties)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
-	char* HintConverted = TCHAR_TO_ANSI(*Hint);
 	char* InputedStingConverted = TCHAR_TO_ANSI(*InputedString);
 	int MaxCharactersCountConverted = MaxCharactersCount == 0 ? sizeof(InputedStingConverted) : MaxCharactersCount;
 	ImVec2 BoxSizeConverted = GetScreenSizeInPixels(BoxSize);
 	ImGuiInputTextFlags Flags = 0;
 	for (ImGui_InputTextType SimpleFlag : Properties)
+	{
 		Flags += GetFixedInputTextFlag(SimpleFlag);
+	}
 
-	bool bCallback = ImGui::InputTextExSafe(LabelConverted, HintConverted, InputedStingConverted, MaxCharactersCountConverted, BoxSizeConverted, Flags);
+	bool bCallback = ImGui::InputTextExSafe(TCHAR_TO_ANSI(*Label), TCHAR_TO_ANSI(*Hint), InputedStingConverted, MaxCharactersCountConverted, BoxSizeConverted, Flags);
 
 	InputedString = FString(ANSI_TO_TCHAR(InputedStingConverted));
 	return bCallback;
@@ -433,16 +450,14 @@ bool UImGuiBPFL::AddInputTextBox(FString Label, FString Hint, FString& InputedSt
 // Widgets: Color Editor/Picker (tip: the ColorEdit* functions have a little color square that can be left-clicked to open a picker, and right-clicked to open an option menu.)
 /* Widgets / Trees */
 
-bool UImGuiBPFL::AddTreeNode(FString Label)
+bool UImGuiBPFL::TreeNode(FString Label)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
-	return ImGui::TreeNode(LabelConverted);
+	return ImGui::TreeNode(TCHAR_TO_ANSI(*Label));
 }
 
-bool UImGuiBPFL::AddCollapsingHeader(FString Label)
+bool UImGuiBPFL::CollapsingHeader(FString Label)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
-	return ImGui::CollapsingHeader(LabelConverted);
+	return ImGui::CollapsingHeader(TCHAR_TO_ANSI(*Label));
 }
 
 void UImGuiBPFL::SetNextItemOpen(bool bOpen, ImGui_WindowConditions Condition)
@@ -454,20 +469,18 @@ void UImGuiBPFL::SetNextItemOpen(bool bOpen, ImGui_WindowConditions Condition)
 
 bool UImGuiBPFL::Selectable(FString Label, bool& bSelected, FVector2D Size)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
 	ImVec2 SizeConverted = GetScreenSizeInPixels(Size);
 
-	return ImGui::Selectable(LabelConverted, &bSelected, 0, SizeConverted);
+	return ImGui::Selectable(TCHAR_TO_ANSI(*Label), &bSelected, MISSING_FLAG, SizeConverted);
 }
 
 /* Widgets / List Boxes	*/
 
 bool UImGuiBPFL::BeginListBox(FString Label, FVector2D Size)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
 	ImVec2 SizeConverted = GetScreenSizeInPixels(Size);
 
-	return ImGui::BeginListBox(LabelConverted, SizeConverted);
+	return ImGui::BeginListBox(TCHAR_TO_ANSI(*Label), SizeConverted);
 }
 
 void UImGuiBPFL::EndListBox()
@@ -479,12 +492,12 @@ void UImGuiBPFL::EndListBox()
 // Widgets: Value() Helpers.
 /* Widgets / Menus */
 
-bool UImGuiBPFL::BeginAddingToMenuBar()
+bool UImGuiBPFL::BeginMenuBar()
 {
 	return ImGui::BeginMenuBar();
 }
 
-void UImGuiBPFL::EndAddingToMenuBar()
+void UImGuiBPFL::EndMenuBar()
 {
 	ImGui::EndMenuBar();
 }
@@ -501,8 +514,7 @@ void UImGuiBPFL::EndMainMenuBar()
 
 bool UImGuiBPFL::BeginMenu(FString Label, bool bEnabled)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
-	return ImGui::BeginMenu(LabelConverted, bEnabled);
+	return ImGui::BeginMenu(TCHAR_TO_ANSI(*Label), bEnabled);
 }
 
 void UImGuiBPFL::EndMenu()
@@ -510,11 +522,9 @@ void UImGuiBPFL::EndMenu()
 	ImGui::EndMenu();
 }
 
-bool UImGuiBPFL::AddMenuItem(FString Label, FString Shortcut, bool& bSelected, bool bEnabled)
+bool UImGuiBPFL::MenuItem(FString Label, FString Shortcut, bool& bSelected, bool bEnabled)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
-	char* ShortcutConverted = TCHAR_TO_ANSI(*Shortcut);
-	return ImGui::MenuItem(LabelConverted, ShortcutConverted, &bSelected, bEnabled);
+	return ImGui::MenuItem(TCHAR_TO_ANSI(*Label), TCHAR_TO_ANSI(*Shortcut), &bSelected, bEnabled);
 }
 
 /* Tooltips */
@@ -533,7 +543,6 @@ void UImGuiBPFL::EndTooltip()
 
 bool UImGuiBPFL::BeginPopup(FString HashName, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties)
 {
-	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
 	ImGuiWindowFlags PropertiesConverted = 0;
 
 	for (ImGui_WindowFlags Flag : Properties)
@@ -541,12 +550,11 @@ bool UImGuiBPFL::BeginPopup(FString HashName, TSet<TEnumAsByte<ImGui_WindowFlags
 		PropertiesConverted += GetFixedWidnowFlag(Flag);
 	}
 
-	return ImGui::BeginPopup(HashNameConverted, PropertiesConverted);
+	return ImGui::BeginPopup(TCHAR_TO_ANSI(*HashName), PropertiesConverted);
 }
 
 bool UImGuiBPFL::BeginPopupModal(FString Name, bool bClosable, bool& bOpenModal, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties)
 {
-	char* NameConverted = TCHAR_TO_ANSI(*Name);
 	bool* bOpenConverted = bClosable ? &bOpenModal : nullptr;
 	ImGuiWindowFlags PropertiesConverted = 0;
 
@@ -555,7 +563,7 @@ bool UImGuiBPFL::BeginPopupModal(FString Name, bool bClosable, bool& bOpenModal,
 		PropertiesConverted += GetFixedWidnowFlag(Flag);
 	}
 
-	return ImGui::BeginPopupModal(NameConverted, bOpenConverted, PropertiesConverted);
+	return ImGui::BeginPopupModal(TCHAR_TO_ANSI(*Name), bOpenConverted, PropertiesConverted);
 }
 
 void UImGuiBPFL::EndPopup()
@@ -565,11 +573,9 @@ void UImGuiBPFL::EndPopup()
 
 void UImGuiBPFL::OpenPopup(FString HashName)
 {
-	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
-
 	if (!ImGui::IsMouseDown(ImGuiMouseButton_Left))	 //TEMP, FIXME
 	{
-		ImGui::OpenPopup(HashNameConverted, 0);
+		ImGui::OpenPopup(TCHAR_TO_ANSI(*HashName), MISSING_FLAG);
 	}
 }
 
@@ -580,9 +586,7 @@ void UImGuiBPFL::CloseCurrentPopup()
 
 bool UImGuiBPFL::IsPopupOpen(FString HashName)
 {
-	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
-
-	return ImGui::IsPopupOpen(HashNameConverted, 0);
+	return ImGui::IsPopupOpen(TCHAR_TO_ANSI(*HashName), MISSING_FLAG);
 }
 
 // Popups: open/close functions
@@ -592,10 +596,9 @@ bool UImGuiBPFL::IsPopupOpen(FString HashName)
 
 bool UImGuiBPFL::BeginTable(FString HashName, int Column, FVector2D OuterSize, float InnerWidth)
 {
-	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
 	ImVec2 OuterSizeConverted = GetScreenSizeInPixels(OuterSize);
 
-	return ImGui::BeginTable(HashNameConverted, Column, 0, OuterSizeConverted, InnerWidth);
+	return ImGui::BeginTable(TCHAR_TO_ANSI(*HashName), Column, MISSING_FLAG, OuterSizeConverted, InnerWidth);
 }
 
 void UImGuiBPFL::EndTable()
@@ -605,7 +608,7 @@ void UImGuiBPFL::EndTable()
 
 void UImGuiBPFL::TableNextRow(float MinRowHeight)
 {
-	ImGui::TableNextRow(0, MinRowHeight);
+	ImGui::TableNextRow(MISSING_FLAG, MinRowHeight);
 }
 
 bool UImGuiBPFL::TableNextColumn()
@@ -620,9 +623,7 @@ bool UImGuiBPFL::TableSetColumnIndex(int Column)
 
 void UImGuiBPFL::TableHeader(FString Label)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
-
-	ImGui::TableHeader(LabelConverted);
+	ImGui::TableHeader(TCHAR_TO_ANSI(*Label));
 }
 
 // Tables: Headers & Columns declaration
@@ -633,9 +634,7 @@ void UImGuiBPFL::TableHeader(FString Label)
 
 bool UImGuiBPFL::BeginTabBar(FString HashName)
 {
-	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
-
-	return ImGui::BeginTabBar(HashNameConverted);
+	return ImGui::BeginTabBar(TCHAR_TO_ANSI(*HashName));
 }
 
 void UImGuiBPFL::EndTabBar()
@@ -645,10 +644,9 @@ void UImGuiBPFL::EndTabBar()
 
 bool UImGuiBPFL::BeginTabItem(FString Label, bool bClosable, bool& bOpen)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
 	bool* bOpenConverted = bClosable ? &bOpen : nullptr;
 
-	return ImGui::BeginTabItem(LabelConverted, bOpenConverted);
+	return ImGui::BeginTabItem(TCHAR_TO_ANSI(*Label), bOpenConverted);
 }
 
 void UImGuiBPFL::EndTabItem()
@@ -658,16 +656,12 @@ void UImGuiBPFL::EndTabItem()
 
 bool UImGuiBPFL::TabItemButton(FString Label)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
-
-	return ImGui::TabItemButton(LabelConverted, 0);
+	return ImGui::TabItemButton(TCHAR_TO_ANSI(*Label), 0);
 }
 
 void UImGuiBPFL::SetNextTabItemClosed(FString Label)
 {
-	char* LabelConverted = TCHAR_TO_ANSI(*Label);
-
-	ImGui::SetTabItemClosed(LabelConverted);
+	ImGui::SetTabItemClosed(TCHAR_TO_ANSI(*Label));
 }
 
 
@@ -678,14 +672,12 @@ void UImGuiBPFL::SetNextTabItemClosed(FString Label)
 
 bool UImGuiBPFL::BeginDragDropSource()
 {
-	return ImGui::BeginDragDropSource(0);
+	return ImGui::BeginDragDropSource(MISSING_FLAG);
 }
 
 bool UImGuiBPFL::SetDragDropPayload(FString HashName)
 {
-	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
-
-	return ImGui::SetDragDropPayload(HashNameConverted, nullptr, 0);
+	return ImGui::SetDragDropPayload(TCHAR_TO_ANSI(*HashName), nullptr, MISSING_FLAG);
 }
 
 void UImGuiBPFL::EndDragDropSource()
@@ -700,10 +692,9 @@ bool UImGuiBPFL::BeginDragDropTarget()
 
 bool UImGuiBPFL::AcceptDragDropPayload(FString HashName)
 {
-	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
 	const ImGuiPayload* Payload;
 
-	Payload = ImGui::AcceptDragDropPayload(HashNameConverted, 0);
+	Payload = ImGui::AcceptDragDropPayload(TCHAR_TO_ANSI(*HashName), MISSING_FLAG);
 	return Payload ? true : false;
 }
 

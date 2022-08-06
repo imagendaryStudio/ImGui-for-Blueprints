@@ -132,18 +132,18 @@ public:
 
 /* Windows */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Windows", meta = (AutoCreateRefTerm = "Properties, bOpen", AdvancedDisplay = 2))
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Windows|! Raw C++ Functions !", meta = (AutoCreateRefTerm = "Properties, bOpen"))
 	static UPARAM(DisplayName = "bOpen") bool BeginMainWindow(FString Name, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties, bool bClosable, UPARAM(ref) bool& bOpen);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Windows")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Windows|! Raw C++ Functions !")
 	static void EndMainWindow();
 
 /* Child Windows */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Child Windows")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Child Windows|! Raw C++ Functions !", meta = (AutoCreateRefTerm = "Properties"))
 	static UPARAM(DisplayName = "bVisible") bool BeginChild(FString HashName, FVector2D Size, bool bBorder, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Child Windows")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Child Windows|! Raw C++ Functions !")
 	static void EndChild();
 
 /* Windows Utilities */
@@ -212,10 +212,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|Cursor|Layout")
 	static void Indent(float ToRight = 0);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Cursor|Layout")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Cursor|Layout|! Raw C++ Functions !")
 	static void BeginGroup();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Cursor|Layout")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Cursor|Layout|! Raw C++ Functions !")
 	static void EndGroup();
 
 // ID stack/scopes
@@ -227,26 +227,26 @@ public:
 
 /* Widgets / Main */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")
-	static UPARAM(DisplayName = "bClicked") bool AddButton(FString Label, FVector2D Size);
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Main|! Raw C++ Functions !")
+	static UPARAM(DisplayName = "bClicked") bool Button(FString Label, FVector2D Size);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Main|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bClicked") bool SmallButton(FString Label);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")
-	static UPARAM(DisplayName = "bClicked") bool AddInvisibleButton(FString HashName, FVector2D Size);
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Main|! Raw C++ Functions !")
+	static UPARAM(DisplayName = "bClicked") bool InvisibleButton(FString HashName, FVector2D Size);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Main|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bClicked") bool ArrowButton(FString HashName, ImGui_DirType Direction);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")
-	static UPARAM(DisplayName = "bChanged") bool AddCheckbox(FString Label, UPARAM(ref) bool& CheckedBool);
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Main|! Raw C++ Functions !")
+	static UPARAM(DisplayName = "bChanged") bool Checkbox(FString Label, UPARAM(ref) bool& CheckedBool);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")
-	static UPARAM(DisplayName = "bClicked") bool AddRadioButton(FString Label, bool bActive);
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Main|! Raw C++ Functions !")
+	static UPARAM(DisplayName = "bClicked") bool RadioButton(FString Label, bool bActive);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")
-	static UPARAM(DisplayName = "bClicked") bool AddRadioButtonList(TSet<FString> Labels, UPARAM(ref) int& RadioedIntiger);
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Main|! Raw C++ Functions !")
+	static UPARAM(DisplayName = "bClicked") bool RadioButtonList(TSet<FString> Labels, UPARAM(ref) int& RadioedIntiger);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Main")
 	static void AddProgressBar(float Fraction, FVector2D Size, FString Overlay);
@@ -256,57 +256,57 @@ public:
 
 /* Widgets / Combo Box */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Combo Box")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Combo Box|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bOpen") bool BeginCombo(FString Label, FString Preview);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Combo Box")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Combo Box|! Raw C++ Functions !")
 	static void EndCombo();
 
 /* Widgets / Drag Sliders */  
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Drag Sliders")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Drag Sliders|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bChanged") bool AddDragFloatArray(FString Label, UPARAM(ref) TArray<float>& DraggedArrayReference, float DragSpeed = 1.0f, float MinValue = 0.0f, float MaxValue = 0.0f);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Drag Sliders")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Drag Sliders|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bChanged") bool AddDragIntArray(FString Label, UPARAM(ref) TArray<int>& DraggedArrayReference, float DragSpeed = 1.0f, int MinValue = 0, int MaxValue = 0);
 
 /* Widgets / Regular Sliders */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Regular Sliders")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Regular Sliders|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bChanged") bool AddSliderFloatArray(FString Label, UPARAM(ref) TArray<float>& SlidedArrayReference, float MinValue = 0.0f, float MaxValue = 100.0f);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Regular Sliders")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Regular Sliders|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bChanged") bool AddSliderIntArray(FString Label, UPARAM(ref) TArray<int>& SlidedArrayReference, int MinValue = 0, int MaxValue = 100);
 
 
 /* Widgets / Input with Keyboard */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Input with Keyboard")
-	static UPARAM(DisplayName = "bCallback") bool AddInputTextBox(FString Label, FString Hint, UPARAM(ref) FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, TSet<TEnumAsByte<ImGui_InputTextType>> Properties);
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Input with Keyboard|! Raw C++ Functions !", meta = (AutoCreateRefTerm = "Properties"))
+	static UPARAM(DisplayName = "bCallback") bool InputTextBox(FString Label, FString Hint, UPARAM(ref) FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, TSet<TEnumAsByte<ImGui_InputTextType>> Properties);
 
 // Widgets: Color Editor/Picker (tip: the ColorEdit* functions have a little color square that can be left-clicked to open a picker, and right-clicked to open an option menu.)
 /* Widgets / Trees */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Trees")
-	static UPARAM(DisplayName = "bOpen") bool AddTreeNode(FString Label);
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Trees|! Raw C++ Functions !")
+	static UPARAM(DisplayName = "bOpen") bool TreeNode(FString Label);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Trees")
-	static UPARAM(DisplayName = "bOpen") bool AddCollapsingHeader(FString Label);
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Trees|! Raw C++ Functions !")
+	static UPARAM(DisplayName = "bOpen") bool CollapsingHeader(FString Label);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Trees")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Trees|! Raw C++ Functions !")
 	static void SetNextItemOpen(bool bOpen = true, ImGui_WindowConditions Condition = Always);
 
 /* Widgets / Selectables */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Selectables", meta = (AutoCreateRefTerm = "bSelected"))
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Selectables|! Raw C++ Functions !", meta = (AutoCreateRefTerm = "bSelected"))
 	static UPARAM(DisplayName = "bClicked") bool Selectable(FString Label, UPARAM(ref) bool& bSelected, FVector2D Size);
 
 /* Widgets / List Boxes	*/
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|List Boxes")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|List Boxes|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bOpen") bool BeginListBox(FString Label, FVector2D Size);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|List Boxes")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|List Boxes|! Raw C++ Functions !")
 	static void EndListBox();
 
 // Widgets: Data Plotting
@@ -314,50 +314,50 @@ public:
 
 /* Widgets / Menus */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Menus")
-	static UPARAM(DisplayName = "bOpen") bool BeginAddingToMenuBar();
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Menus|! Raw C++ Functions !")
+	static UPARAM(DisplayName = "bOpen") bool BeginMenuBar();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Menus")
-	static void EndAddingToMenuBar();
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Menus|! Raw C++ Functions !")
+	static void EndMenuBar();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Menus")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Menus|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bOpen") bool BeginMainMenuBar();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Menus")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Menus|! Raw C++ Functions !")
 	static void EndMainMenuBar();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Menus")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Menus|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bOpen") bool BeginMenu(FString Label, bool bEnabled);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Menus")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Menus|! Raw C++ Functions !")
 	static void EndMenu();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Menus")
-	static UPARAM(DisplayName = "bActivated") bool AddMenuItem(FString Label, FString Shortcut, UPARAM(ref) bool& bSelected, bool bEnabled);
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Widgets|Menus|! Raw C++ Functions !")
+	static UPARAM(DisplayName = "bActivated") bool MenuItem(FString Label, FString Shortcut, UPARAM(ref) bool& bSelected, bool bEnabled);
 
 /* Tooltips	*/
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tooltips")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tooltips|! Raw C++ Functions !")
 	static void BeginTooltip();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tooltips")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tooltips|! Raw C++ Functions !")
 	static void EndTooltip();
 
 /* Popups / begin/end functions */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Popups")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Popups|! Raw C++ Functions !", meta = (AutoCreateRefTerm = "Properties"))
 	static UPARAM(DisplayName = "bOpen") bool BeginPopup(FString HashName, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Popups", meta = (AutoCreateRefTerm = "bOpenModal"))
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Popups|! Raw C++ Functions !", meta = (AutoCreateRefTerm = "bOpenModal, Properties"))
 	static UPARAM(DisplayName = "bOpen") bool BeginPopupModal(FString Name, bool bClosable, UPARAM(ref) bool& bOpenModal, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Popups")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Popups|! Raw C++ Functions !")
 	static void EndPopup();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Popups")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Popups|! Raw C++ Functions !")
 	static void OpenPopup(FString HashName);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Popups")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Popups|! Raw C++ Functions !")
 	static void CloseCurrentPopup();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|Popups", BlueprintPure)
@@ -369,22 +369,22 @@ public:
 
 /* Tables */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tables")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tables|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bOpen") bool BeginTable(FString HashName, int Column, FVector2D OuterSize, float InnerWidth);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tables")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tables|! Raw C++ Functions !")
 	static void EndTable();
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tables")
 	static void TableNextRow(float MinRowHeight);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tables")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tables|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bVisible") bool TableNextColumn();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tables")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tables|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bVisible") bool TableSetColumnIndex(int Column);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tables")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tables|! Raw C++ Functions !")
 	static void TableHeader(FString Label);
 
 // Tables: Headers & Columns declaration
@@ -393,19 +393,19 @@ public:
 // Legacy Columns API (prefer using Tables!)
 /* Tab Bars, Tabs */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tab Bars, Tabs")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tab Bars, Tabs|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bVisible") bool BeginTabBar(FString HashName);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tab Bars, Tabs")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tab Bars, Tabs|! Raw C++ Functions !")
 	static void EndTabBar();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tab Bars, Tabs", meta = (AutoCreateRefTerm = "bOpen"))
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tab Bars, Tabs|! Raw C++ Functions !", meta = (AutoCreateRefTerm = "bOpen"))
 	static UPARAM(DisplayName = "bSelected") bool BeginTabItem(FString Label, bool bClosable, UPARAM(ref) bool& bOpen);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tab Bars, Tabs")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tab Bars, Tabs|! Raw C++ Functions !")
 	static void EndTabItem();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Tab Bars, Tabs")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tab Bars, Tabs|! Raw C++ Functions !")
 	static UPARAM(DisplayName = "bClicked") bool TabItemButton(FString Label);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|Tab Bars, Tabs")
@@ -416,30 +416,30 @@ public:
 
 /* Drag and Drop */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Drag and Drop")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Drag and Drop|! Raw C++ Functions !")
 	static bool BeginDragDropSource();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Drag and Drop")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Drag and Drop|! Raw C++ Functions !")
 	static bool SetDragDropPayload(FString HashName);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Drag and Drop")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Drag and Drop|! Raw C++ Functions !")
 	static void EndDragDropSource();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Drag and Drop")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Drag and Drop|! Raw C++ Functions !")
 	static bool BeginDragDropTarget();
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Drag and Drop")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Drag and Drop|! Raw C++ Functions !")
 	static bool AcceptDragDropPayload(FString HashName);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Drag and Drop")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Drag and Drop|! Raw C++ Functions !")
 	static void EndDragDropTarget();
 
 /* Disabling [BETA API] */
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Disabling")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Disabling|! Raw C++ Functions !")
 	static void BeginDisabled(bool bDisabled = true);
 
-	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Disabling")
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|Disabling|! Raw C++ Functions !")
 	static void EndDisabled();
 
 // Clipping
