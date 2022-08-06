@@ -218,6 +218,9 @@ public:
 	static UPARAM(DisplayName = "bClicked") bool AddButton(FString Name, FVector2D Size);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")
+	static UPARAM(DisplayName = "bClicked") bool AddInvisibleButton(FString HashName, FVector2D Size);
+
+	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")
 	static UPARAM(DisplayName = "bChanged") bool AddCheckbox(FString Label, UPARAM(ref) bool& CheckedBool);
 
 	UFUNCTION(BlueprintCallable, Category = "DearImGui|! Raw C++ Functions !|Widgets|Main")

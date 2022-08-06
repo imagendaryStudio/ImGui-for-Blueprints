@@ -255,6 +255,14 @@ bool UImGuiBPFL::AddButton(FString Name, FVector2D Size)
 	return ImGui::Button(NameConverted, SizeInPixels);
 }
 
+bool UImGuiBPFL::AddInvisibleButton(FString HashName, FVector2D Size)
+{
+	char* HashNameConverted = TCHAR_TO_ANSI(*HashName);
+	ImVec2 SizeInPixels = GetScreenSizeInPixels(Size);
+
+	return ImGui::InvisibleButton(HashNameConverted, SizeInPixels);
+}
+
 bool UImGuiBPFL::AddCheckbox(FString Label, bool& CheckedBool)
 {
 	char* LabelConverted = TCHAR_TO_ANSI(*Label);
