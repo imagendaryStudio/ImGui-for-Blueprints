@@ -1,20 +1,20 @@
-ImGui-for-Blueprints [Work in Progress]
+ImGui-for-Blueprints
 ============
 
-Fork of [UnrealImGui](https://github.com/segross/UnrealImGui) which is an Unreal Engine 4 plug-in that integrates [Dear ImGui](https://github.com/ocornut/imgui) developed by Omar Cornut.
+This is a fork of [UnrealImGui](https://github.com/segross/UnrealImGui) which is an Unreal Engine Plugin that integrates [Dear ImGui](https://github.com/ocornut/imgui) library. Additionally, this code contains a lot of improvements from [WiggleWizard's fork](https://github.com/WiggleWizard/UnrealImGui).
+Dear ImGui is an immediate-mode graphical user interface library that is widely used in Engine/Game Development, due to its simplicity.
 
-This fork is ment to **expose high-level ImGui functionality to Blueprint Graphs** and extend it event futher via macros.
+This fork is ment to **expose high-level ImGui functionality to Blueprint Visual Scripting**.
 
-# Mainly edited/added content [WIP]:
-https://github.com/sleeptightAnsiC/ImGui-for-Blueprints/blob/master/Source/ImGui/Public/ImGuiBPFL.h
+Right now, I use this repo for my personal Unreal Engine projects as a quick way of creating Debugers.
 
-https://github.com/sleeptightAnsiC/ImGui-for-Blueprints/blob/master/Source/ImGui/Private/ImGuiBPFL.cpp
 
-https://github.com/sleeptightAnsiC/ImGui-for-Blueprints/blob/master/Content/ImGuiBPFL.uasset
+# Content added by this fork:
+https://github.com/sleeptightAnsiC/ImGui-for-Blueprints/tree/master/Content
 
-https://github.com/sleeptightAnsiC/ImGui-for-Blueprints/blob/master/Content/ImGuiBPML.uasset
+https://github.com/sleeptightAnsiC/ImGui-for-Blueprints/tree/master/Source/ImGui/BP
 
-# Some preview examples:
+# Few examples:
 
 ### Hello world
 ![image](https://user-images.githubusercontent.com/91839286/182046760-40d63e81-7f51-46b8-8c7e-7ed84d92a4c0.png)
