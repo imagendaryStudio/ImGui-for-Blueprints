@@ -9,7 +9,7 @@ This fork is ment to **expose high-level ImGui functionality to Blueprint Visual
 Right now, I use this repo for my personal projects as a quick way of creating Debugers.
 
 
-# Content added by this fork:
+# Files added by this fork:
 https://github.com/sleeptightAnsiC/ImGui-for-Blueprints/tree/master/Content
 
 https://github.com/sleeptightAnsiC/ImGui-for-Blueprints/tree/master/Source/ImGui/BP
