@@ -11,7 +11,6 @@
 UENUM(BlueprintType, meta = (Bitflags))
 enum class EImGuiWindowFlags : uint8
 {
-	None UMETA(Hidden),
 	NoTitleBar,					// Disable title-bar
 	NoResize,					// Disable user resizing with the lower-right grip
 	NoMove,						// Disable user moving the window
@@ -39,7 +38,7 @@ enum class EImGuiWindowFlags : uint8
 UENUM(BlueprintType)
 enum EImGuiConditions
 {
-	None UMETA(Hidden),		// No condition (always set the variable), same as _Always
+	None UMETA(Hidden),			// No condition (always set the variable), same as _Always
 	Always = 1 << 0,			// No condition (always set the variable)
 	Once = 1 << 1,				// Set the variable once per runtime session (only the first call will succeed)
 	FirstUseEver = 1 << 2,		// Set the variable if the object/window has no persistently saved data (no entry in .ini file)
@@ -65,7 +64,6 @@ enum ImGui_DragType
 UENUM(BlueprintType, meta = (Bitflags))
 enum class EImGuiInputTextFlags : uint8
 {
-	None UMETA(Hidden),
 	CharsDecimal,					// Allow 0123456789.+-*/
 	CharsHexadecimal,				// Allow 0123456789ABCDEFabcdef
 	CharsUppercase,					// Turn a..z into A..Z
