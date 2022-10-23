@@ -8,39 +8,6 @@
 #define MISSING_FLAG 0
 
 //Public
-// placeholders - test
-
-void UImGuiBPFL::PrintSimpleWindow(FString Name, FString Text, FVector2D ScreenPosition)
-{
-	UImGuiBPFL::SetNextWindowScreenPosition(ScreenPosition, Once);
-	ImGui::Begin(TCHAR_TO_ANSI(*Name), nullptr, ImGuiWindowFlags_AlwaysAutoResize + ImGuiWindowFlags_None);
-	ImGui::Text(TCHAR_TO_ANSI(*Text));
-	ImGui::End();
-}
-
-void UImGuiBPFL::PrintSimpleWatermark(FString Name, FString Text, FVector2D ScreenPosition, bool bPrintTextOnly, float BackgroundAlpha)
-{	
-	auto flags =
-			ImGuiWindowFlags_AlwaysAutoResize +
-			ImGuiWindowFlags_NoCollapse +
-			ImGuiWindowFlags_NoInputs +
-			ImGuiWindowFlags_NoFocusOnAppearing +
-			ImGuiWindowFlags_NoNav +
-			ImGuiWindowFlags_NoMove +
-			ImGuiWindowFlags_None;
-
-	if (bPrintTextOnly)
-	{
-		flags += ImGuiWindowFlags_NoTitleBar;
-	}
-
-	UImGuiBPFL::SetNextWindowScreenPosition(ScreenPosition, Always);
-	ImGui::SetNextWindowBgAlpha(BackgroundAlpha);	
-	ImGui::Begin(TCHAR_TO_ANSI(*Name), nullptr, flags);
-	ImGui::Text(TCHAR_TO_ANSI(*Text));
-	ImGui::End();
-}
-
 
 //Public
 
@@ -54,19 +21,13 @@ void UImGuiBPFL::PrintSimpleWatermark(FString Name, FString Text, FVector2D Scre
 
 /* Windows */
 
-bool UImGuiBPFL::BeginMainWindow(FString Name, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties, bool bClosable, bool& bOpen)
+bool UImGuiBPFL::BeginMainWindow(FString Name, int WindowFlagsBitmask, bool bClosable, bool& bOpen)
 {
-	ImGuiWindowFlags PropertiesConverted = 0;
 	bool* bOpenConverted = bClosable ? &bOpen : nullptr;
-
-	for (ImGui_WindowFlags Flag : Properties)
-	{
-		PropertiesConverted += GetFixedWidnowFlag(Flag);
-	}
 
 	if (!bClosable || bOpen)
 	{
-		return ImGui::Begin(TCHAR_TO_ANSI(*Name), bOpenConverted, PropertiesConverted);
+		return ImGui::Begin(TCHAR_TO_ANSI(*Name), bOpenConverted, WindowFlagsBitmask);
 	}
 	else
 	{
@@ -81,18 +42,12 @@ void UImGuiBPFL::EndMainWindow()
 
 /* Child Windows */
 
-bool UImGuiBPFL::BeginChild(FString HashName, FVector2D Size, bool bBorder, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties)
+bool UImGuiBPFL::BeginChild(FString HashName, FVector2D Size, bool bBorder, int WindowFlagsBitmask)
 {
 	int HashId = GetTypeHash(HashName);
 	ImVec2 SizeInPixels = GetScreenSizeInPixels(Size);
-	ImGuiWindowFlags Flags = 0;
-
-	for (ImGui_WindowFlags SimpleFlag : Properties)
-	{
-		Flags += GetFixedWidnowFlag(SimpleFlag);
-	}
-
-	return ImGui::BeginChild(HashId, SizeInPixels, bBorder, Flags);
+	
+	return ImGui::BeginChild(HashId, SizeInPixels, bBorder, WindowFlagsBitmask);
 }
 
 void UImGuiBPFL::EndChild()
@@ -145,26 +100,26 @@ FVector2D UImGuiBPFL::GetWindowSize(bool bRelative)
 
 /* Window manipulation */
 
-void UImGuiBPFL::SetNextWindowScreenPosition(FVector2D ScreenPosition, ImGui_WindowConditions Condition)
+void UImGuiBPFL::SetNextWindowScreenPosition(FVector2D ScreenPosition, EImGuiConditions Condition)
 {
 	FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
 	ImVec2 WindowPosition = GetScreenSizeInPixels(ScreenPosition);
 	ImVec2 WindowPivot = GetRelativeScreenPosition(ScreenPosition);
 
-	if (ViewportSize.X > 0 && ViewportSize.Y > 0)	// don't call when viewport is just begin created
+	if (ViewportSize.X > 0 && ViewportSize.Y > 0)	// avoids a call when the viewport is being created
 	{
-		ImGui::SetNextWindowPos(WindowPosition, Condition, WindowPivot);
+		ImGui::SetNextWindowPos(WindowPosition, (ImGuiCond)Condition, WindowPivot);
 	}
 }
 
-void UImGuiBPFL::SetNextWindowSize(FVector2D Size, ImGui_WindowConditions Condition)
+void UImGuiBPFL::SetNextWindowSize(FVector2D Size, EImGuiConditions Condition)
 {
 	FVector2D ViewportSize = FVector2D(GEngine->GameViewport->Viewport->GetSizeXY());
 	ImVec2 SizeConverted = GetScreenSizeInPixels(Size);
 
-	if (ViewportSize.X > 0 && ViewportSize.Y > 0)	 // don't call when viewport is just begin created
+	if (ViewportSize.X > 0 && ViewportSize.Y > 0)	 // avoids a call when the viewport is being created
 	{
-		ImGui::SetNextWindowSize(SizeConverted, Condition);
+		ImGui::SetNextWindowSize(SizeConverted, (ImGuiCond)Condition);
 	}
 }
 
@@ -191,9 +146,9 @@ void UImGuiBPFL::SetNextWindowContentSize(FVector2D Size)
 	}
 }
 
-void UImGuiBPFL::SetNextWindowCollapsed(bool bCollapsed, ImGui_WindowConditions Condition)
+void UImGuiBPFL::SetNextWindowCollapsed(bool bCollapsed, EImGuiConditions Condition)
 {
-	ImGui::SetNextWindowCollapsed(bCollapsed, Condition);
+	ImGui::SetNextWindowCollapsed(bCollapsed, (ImGuiCond)Condition);
 }
 
 void UImGuiBPFL::SetNextWindowFocused()
@@ -287,9 +242,9 @@ bool UImGuiBPFL::InvisibleButton(FString HashName, FVector2D Size)
 	return ImGui::InvisibleButton(TCHAR_TO_ANSI(*HashName), SizeInPixels);
 }
 
-bool UImGuiBPFL::ArrowButton(FString HashName, ImGui_DirType Direction)
+bool UImGuiBPFL::ArrowButton(FString HashName, EImGuiDirectionType Direction)
 {
-	return ImGui::ArrowButton(TCHAR_TO_ANSI(*HashName), Direction - 1);
+	return ImGui::ArrowButton(TCHAR_TO_ANSI(*HashName), (ImGuiDir)Direction - 1);
 }
 
 bool UImGuiBPFL::Checkbox(FString Label, bool& CheckedBool)
@@ -430,18 +385,13 @@ bool UImGuiBPFL::AddSliderIntArray(FString Label, TArray<int>& SlidedArrayRefere
 
 /* Widgets: Input with Keyboard	*/
 
-bool UImGuiBPFL::InputTextBox(FString Label, FString Hint, FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, TSet<TEnumAsByte<ImGui_InputTextType>> Properties)
+bool UImGuiBPFL::InputTextBox(FString Label, FString Hint, UPARAM(ref) FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, int InputTextFlagsBitmask)
 {
 	char* InputedStingConverted = TCHAR_TO_ANSI(*InputedString);
 	int MaxCharactersCountConverted = MaxCharactersCount == 0 ? sizeof(InputedStingConverted) : MaxCharactersCount;
 	ImVec2 BoxSizeConverted = GetScreenSizeInPixels(BoxSize);
-	ImGuiInputTextFlags Flags = 0;
-	for (ImGui_InputTextType SimpleFlag : Properties)
-	{
-		Flags += GetFixedInputTextFlag(SimpleFlag);
-	}
 
-	bool bCallback = ImGui::InputTextExSafe(TCHAR_TO_ANSI(*Label), TCHAR_TO_ANSI(*Hint), InputedStingConverted, MaxCharactersCountConverted, BoxSizeConverted, Flags);
+	bool bCallback = ImGui::InputTextExSafe(TCHAR_TO_ANSI(*Label), TCHAR_TO_ANSI(*Hint), InputedStingConverted, MaxCharactersCountConverted, BoxSizeConverted, InputTextFlagsBitmask);
 
 	InputedString = FString(ANSI_TO_TCHAR(InputedStingConverted));
 	return bCallback;
@@ -460,9 +410,9 @@ bool UImGuiBPFL::CollapsingHeader(FString Label)
 	return ImGui::CollapsingHeader(TCHAR_TO_ANSI(*Label));
 }
 
-void UImGuiBPFL::SetNextItemOpen(bool bOpen, ImGui_WindowConditions Condition)
+void UImGuiBPFL::SetNextItemOpen(bool bOpen, EImGuiConditions Condition)
 {
-	ImGui::SetNextItemOpen(bOpen, Condition);
+	ImGui::SetNextItemOpen(bOpen, (ImGuiCond)Condition);
 }
 
 /* Widgets / Selectables */
@@ -541,29 +491,16 @@ void UImGuiBPFL::EndTooltip()
 
 /* Popups / begin/end functions */
 
-bool UImGuiBPFL::BeginPopup(FString HashName, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties)
+bool UImGuiBPFL::BeginPopup(FString HashName, int WindowFlagsBitmask)
 {
-	ImGuiWindowFlags PropertiesConverted = 0;
-
-	for (ImGui_WindowFlags Flag : Properties)
-	{
-		PropertiesConverted += GetFixedWidnowFlag(Flag);
-	}
-
-	return ImGui::BeginPopup(TCHAR_TO_ANSI(*HashName), PropertiesConverted);
+	return ImGui::BeginPopup(TCHAR_TO_ANSI(*HashName), WindowFlagsBitmask);
 }
 
-bool UImGuiBPFL::BeginPopupModal(FString Name, bool bClosable, bool& bOpenModal, TSet<TEnumAsByte<ImGui_WindowFlags>> Properties)
+bool UImGuiBPFL::BeginPopupModal(FString Name, bool bClosable, UPARAM(ref) bool& bOpenModal, int WindowFlagsBitmask)
 {
 	bool* bOpenConverted = bClosable ? &bOpenModal : nullptr;
-	ImGuiWindowFlags PropertiesConverted = 0;
 
-	for (ImGui_WindowFlags Flag : Properties)
-	{
-		PropertiesConverted += GetFixedWidnowFlag(Flag);
-	}
-
-	return ImGui::BeginPopupModal(TCHAR_TO_ANSI(*Name), bOpenConverted, PropertiesConverted);
+	return ImGui::BeginPopupModal(TCHAR_TO_ANSI(*Name), bOpenConverted, WindowFlagsBitmask);
 }
 
 void UImGuiBPFL::EndPopup()
@@ -732,111 +669,7 @@ void UImGuiBPFL::EndDisabled()
 // Memory Allocators
 
 
-//TEST Func
-
-void UImGuiBPFL::TestFunction()
-{
-	//ImGui::StyleColorsClassic();
-}
-
 //Private
-
-ImGuiWindowFlags UImGuiBPFL::GetFixedWidnowFlag(ImGui_WindowFlags Flag)
-{
-	switch (Flag)
-	{
-	case NoTitleBar:
-		return ImGuiWindowFlags_NoTitleBar;
-	case NoResize:
-		return ImGuiWindowFlags_NoResize;
-	case NoMove:
-		return ImGuiWindowFlags_NoMove;
-	case NoScrollbar:
-		return ImGuiWindowFlags_NoScrollbar;
-	case NoScrollWithMouse:
-		return ImGuiWindowFlags_NoScrollWithMouse;
-	case NoCollapse:
-		return ImGuiWindowFlags_NoCollapse;
-	case AlwaysAutoResize:
-		return ImGuiWindowFlags_AlwaysAutoResize;
-	case NoBackground:
-		return ImGuiWindowFlags_NoBackground;
-	case NoSavedSettings:
-		return ImGuiWindowFlags_NoSavedSettings;
-	case NoMouseInputs:
-		return ImGuiWindowFlags_NoMouseInputs;
-	case MenuBar:
-		return ImGuiWindowFlags_MenuBar;
-	case HorizontalScrollbar:
-		return ImGuiWindowFlags_HorizontalScrollbar;
-	case NoFocusOnAppearing:
-		return ImGuiWindowFlags_NoFocusOnAppearing;
-	case NoBringToFrontOnFocus:
-		return ImGuiWindowFlags_NoBringToFrontOnFocus;
-	case AlwaysVerticalScrollbar:
-		return ImGuiWindowFlags_AlwaysVerticalScrollbar;
-	case AlwaysHorizontalScrollbar:
-		return ImGuiWindowFlags_AlwaysHorizontalScrollbar;
-	case AlwaysUseWindowPadding:
-		return ImGuiWindowFlags_AlwaysUseWindowPadding;
-	case NoNavInputs:
-		return ImGuiWindowFlags_NoNavInputs;
-	case NoNavFocus:
-		return ImGuiWindowFlags_NoNavFocus;
-	case UnsavedDocument:
-		return ImGuiWindowFlags_UnsavedDocument;
-	case NoNav:
-		return ImGuiWindowFlags_NoNav;
-	case NoDecoration:
-		return ImGuiWindowFlags_NoDecoration;
-	case NoInputs:
-		return ImGuiWindowFlags_NoInputs;;
-	case None:
-		return ImGuiWindowFlags_None;
-	default:
-		UE_LOG(LogTemp, Warning, TEXT("'ImGuiWindowFlags UImGuiBPFL::GetFixedWidnowFlag(ImGui_WindowFlags Flag)' method just returned 'None' due to reching defailt case in switch on ImGui_WindowFlags. Probably new value was added to enum but not to switch."));
-		return ImGuiWindowFlags_None;
-		break;
-	}
-}
-
-ImGuiInputTextFlags UImGuiBPFL::GetFixedInputTextFlag(ImGui_InputTextType Flag)
-{
-	switch (Flag)
-	{
-	case InputText_None:
-		return ImGuiInputTextFlags_None;
-	case InputText_CharsDecimal:
-		return ImGuiInputTextFlags_CharsDecimal;
-	case InputText_Uppercases:
-		return ImGuiInputTextFlags_CharsUppercase;
-	case InputText_NoBlanks:
-		return ImGuiInputTextFlags_CharsNoBlank;
-	case InputText_AutoSelectAll:
-		return ImGuiInputTextFlags_AutoSelectAll;
-	case InputText_EnterReturnsTrue:
-		return ImGuiInputTextFlags_EnterReturnsTrue;
-	case InputText_AllowTabInput:
-		return ImGuiInputTextFlags_AllowTabInput;
-	case InputText_CtrlEnterForNewLine:
-		return ImGuiInputTextFlags_CtrlEnterForNewLine;
-	case InputText_NoHorizontalScroll:
-		return ImGuiInputTextFlags_NoHorizontalScroll;
-	case InputText_ReadOnly:
-		return ImGuiInputTextFlags_ReadOnly;
-	case InputText_Password:
-		return ImGuiInputTextFlags_Password;
-	case InputText_NoUndoRedo:
-		return ImGuiInputTextFlags_NoUndoRedo;
-	case InputText_CharsScientific:
-		return ImGuiInputTextFlags_CharsScientific;
-	default:
-		FString Message = "'ImGuiInputTextFlags UImGuiBPFL::GetFixedInputTextFlag(ImGui_InputTextType Flag)' method just returned 'None' due to reching default case in switch on ImGui_InputTextType. Probably new value was added to enum but not to switch.";
-		GEngine->AddOnScreenDebugMessage((int32)(GetTypeHash(Message)), 0, FColor::Red, Message);
-		return ImGuiWindowFlags_None;
-		break;
-	}
-}
 
 ImVec2 UImGuiBPFL::GetScreenSizeInPixels(FVector2D ScreenSize)
 {
