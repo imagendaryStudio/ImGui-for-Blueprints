@@ -385,7 +385,7 @@ bool UImGuiBPFL::AddSliderIntArray(FString Label, TArray<int>& SlidedArrayRefere
 
 /* Widgets: Input with Keyboard	*/
 
-bool UImGuiBPFL::InputTextBox(FString Label, FString Hint, UPARAM(ref) FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, int InputTextFlagsBitmask)
+bool UImGuiBPFL::AddInputTextBox(FString Label, FString Hint, UPARAM(ref) FString& InputedString, int MaxCharactersCount, FVector2D BoxSize, int InputTextFlagsBitmask)
 {
 	char* InputedStingConverted = TCHAR_TO_ANSI(*InputedString);
 	int MaxCharactersCountConverted = MaxCharactersCount == 0 ? sizeof(InputedStingConverted) : MaxCharactersCount;

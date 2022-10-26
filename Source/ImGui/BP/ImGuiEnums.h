@@ -11,26 +11,46 @@
 UENUM(BlueprintType, meta = (Bitflags))
 enum class EImGuiWindowFlags : uint8
 {
-	NoTitleBar,					// Disable title-bar
-	NoResize,					// Disable user resizing with the lower-right grip
-	NoMove,						// Disable user moving the window
-	NoScrollbar,				// Disable scrollbars (window can still scroll with mouse or programmatically)
-	NoScrollWithMouse,			// Disable user vertically scrolling with mouse wheel. On child window, mouse wheel will be forwarded to the parent unless NoScrollbar is also set.
-	NoCollapse,					// Disable user collapsing window by double-clicking on it. Also referred to as Window Menu Button (e.g. within a docking node).
-	AlwaysAutoResize,			// Resize every window to its content every frame
-	NoBackground,				// Disable drawing background color (WindowBg, etc.) and outside border. Similar as using SetNextWindowBgAlpha(0.0f).
-	NoSavedSettings,			// Never load/save settings in .ini file
-	NoMouseInputs,				// Disable catching mouse, hovering test with pass through.
-	MenuBar,					// Has a menu-bar
-	HorizontalScrollbar,		// Allow horizontal scrollbar to appear (off by default). You may use SetNextWindowContentSize(ImVec2(width,0.0f)); prior to calling Begin() to specify width. Read code in imgui_demo in the "Horizontal Scrolling" section.
-	NoFocusOnAppearing,			// Disable taking focus when transitioning from hidden to visible state
-	NoBringToFrontOnFocus,		// Disable bringing window to front when taking focus (e.g. clicking on it or programmatically giving it focus)
-	AlwaysVerticalScrollbar,	// Always show vertical scrollbar (even if ContentSize.y < Size.y)
-	AlwaysHorizontalScrollbar,	// Always show horizontal scrollbar (even if ContentSize.x < Size.x)
-	AlwaysUseWindowPadding,		// Ensure child windows without border uses style.WindowPadding (ignored by default for non-bordered child windows, because more convenient)
-	NoNavInputs,				// No gamepad/keyboard navigation within the window
-	NoNavFocus,					// No focusing toward this window with gamepad/keyboard navigation (e.g. skipped by CTRL+TAB)
-	UnsavedDocument,			// Display a dot next to the title. When used in a tab/docking context, tab is selected when clicking the X + closure is not assumed (will wait for user to stop submitting the tab). Otherwise closure is assumed when pressing the X, so if you keep submitting the tab may reappear at end of tab bar.                    
+	// Disable title-bar
+	NoTitleBar,					
+	// Disable user resizing with the lower-right grip
+	NoResize,					
+	// Disable user moving the window
+	NoMove,						
+	// Disable scrollbars (window can still scroll with mouse or programmatically)
+	NoScrollbar,				
+	// Disable user vertically scrolling with mouse wheel. On child window, mouse wheel will be forwarded to the parent unless NoScrollbar is also set.
+	NoScrollWithMouse,			
+	// Disable user collapsing window by double-clicking on it. Also referred to as Window Menu Button (e.g. within a docking node).
+	NoCollapse,					
+	// Resize every window to its content every frame
+	AlwaysAutoResize,			
+	// Disable drawing background color (WindowBg, etc.) and outside border. Similar as using SetNextWindowBgAlpha(0.0f).
+	NoBackground,				
+	// Never load/save settings in .ini file
+	NoSavedSettings,			
+	// Disable catching mouse, hovering test with pass through.
+	NoMouseInputs,				
+	// Has a menu-bar
+	MenuBar,					
+	// Allow horizontal scrollbar to appear (off by default). You may use SetNextWindowContentSize(ImVec2(width,0.0f)); prior to calling Begin() to specify width. Read code in imgui_demo in the "Horizontal Scrolling" section.
+	HorizontalScrollbar,		
+	// Disable taking focus when transitioning from hidden to visible state
+	NoFocusOnAppearing,			
+	// Disable bringing window to front when taking focus (e.g. clicking on it or programmatically giving it focus)
+	NoBringToFrontOnFocus,		
+	// Always show vertical scrollbar (even if ContentSize.y < Size.y)
+	AlwaysVerticalScrollbar,	
+	// Always show horizontal scrollbar (even if ContentSize.x < Size.x)
+	AlwaysHorizontalScrollbar,	
+	// Ensure child windows without border uses style.WindowPadding (ignored by default for non-bordered child windows, because more convenient)
+	AlwaysUseWindowPadding,		
+	// No gamepad/keyboard navigation within the window
+	NoNavInputs,				
+	// No focusing toward this window with gamepad/keyboard navigation (e.g. skipped by CTRL+TAB)
+	NoNavFocus,					
+	// Display a dot next to the title. When used in a tab/docking context, tab is selected when clicking the X + closure is not assumed (will wait for user to stop submitting the tab). Otherwise closure is assumed when pressing the X, so if you keep submitting the tab may reappear at end of tab bar.
+	UnsavedDocument,			                    
 };
 
 
@@ -38,11 +58,16 @@ enum class EImGuiWindowFlags : uint8
 UENUM(BlueprintType)
 enum EImGuiConditions
 {
-	None UMETA(Hidden),			// No condition (always set the variable), same as _Always
-	Always = 1 << 0,			// No condition (always set the variable)
-	Once = 1 << 1,				// Set the variable once per runtime session (only the first call will succeed)
-	FirstUseEver = 1 << 2,		// Set the variable if the object/window has no persistently saved data (no entry in .ini file)
-	Appearing = 1 << 3			// Set the variable if the object/window is appearing after being hidden/inactive (or the first time)
+	// No condition (always set the variable), same as _Always
+	NoneCondition UMETA(DisplayName = "None", Hidden),
+	// No condition (always set the variable)
+	Always = 1 << 0,
+	// Set the variable once per runtime session (only the first call will succeed)
+	Once = 1 << 1,
+	// Set the variable if the object/window has no persistently saved data (no entry in .ini file)
+	FirstUseEver = 1 << 2,
+	// Set the variable if the object/window is appearing after being hidden/inactive (or the first time)
+	Appearing = 1 << 3			
 };
 
 
@@ -64,27 +89,48 @@ enum ImGui_DragType
 UENUM(BlueprintType, meta = (Bitflags))
 enum class EImGuiInputTextFlags : uint8
 {
-	CharsDecimal,					// Allow 0123456789.+-*/
-	CharsHexadecimal,				// Allow 0123456789ABCDEFabcdef
-	CharsUppercase,					// Turn a..z into A..Z
-	CharsNoBlank,					// Filter out spaces, tabs
-	AutoSelectAll,					// Select entire text when first taking mouse focus
-	EnterReturnsTrue,				// Return 'true' when Enter is pressed (as opposed to every time the value was modified). Consider looking at the IsItemDeactivatedAfterEdit() function.
-	CallbackCompletion,				// Callback on pressing TAB (for completion handling)
-	CallbackHistory,				// Callback on pressing Up/Down arrows (for history handling)
-	CallbackAlways,					// Callback on each iteration. User code may query cursor position, modify text buffer.
-	CallbackCharFilter,				// Callback on character inputs to replace or discard them. Modify 'EventChar' to replace or discard, or return 1 in callback to discard.
-	AllowTabInput,					// Pressing TAB input a '\t' character into the text field
-	CtrlEnterForNewLine,			// In multi-line mode, unfocus with Enter, add new line with Ctrl+Enter (default is opposite: unfocus with Ctrl+Enter, add line with Enter).
-	NoHorizontalScroll,				// Disable following the cursor horizontally
-	AlwaysOverwrite,				// Overwrite mode
-	ReadOnly,						// Read-only mode
-	Password,						// Password mode, display all characters as '*'
-	NoUndoRedo,						// Disable undo/redo. Note that input text owns the text data while active, if you want to provide your own undo/redo stack you need e.g. to call ClearActiveID().
-	CharsScientific,				// Allow 0123456789.+-*/eE (Scientific notation input)
-	CallbackResize,					// Callback on buffer capacity changes request (beyond 'buf_size' parameter value), allowing the string to grow. Notify when the string wants to be resized (for string types which hold a cache of their Size). You will be provided a new BufSize in the callback and NEED to honor it. (see misc/cpp/imgui_stdlib.h for an example of using this)
-	CallbackEdit,					// Callback on any edit (note that InputText() already returns true on edit, the callback is useful mainly to manipulate the underlying buffer while focus is active)
-	AlwaysInsertMode UMETA(Hidden)	// [renamed in 1.82] name was not matching behavior
+	// Allow 0123456789.+-*/
+	CharsDecimal,
+	// Allow 0123456789ABCDEFabcdef
+	CharsHexadecimal,
+	// Turn a..z into A..Z
+	CharsUppercase,
+	// Filter out spaces, tabs
+	CharsNoBlank,
+	// Select entire text when first taking mouse focus
+	AutoSelectAll,
+	// Return 'true' when Enter is pressed (as opposed to every time the value was modified). Consider looking at the IsItemDeactivatedAfterEdit() function.
+	EnterReturnsTrue,
+	// Callback on pressing TAB (for completion handling)
+	CallbackCompletion,
+	// Callback on pressing Up/Down arrows (for history handling)
+	CallbackHistory,
+	// Callback on each iteration. User code may query cursor position, modify text buffer.
+	CallbackAlways,
+	// Callback on character inputs to replace or discard them. Modify 'EventChar' to replace or discard, or return 1 in callback to discard.
+	CallbackCharFilter,
+	// Pressing TAB input a '\t' character into the text field
+	AllowTabInput,
+	// In multi-line mode, unfocus with Enter, add new line with Ctrl+Enter (default is opposite: unfocus with Ctrl+Enter, add line with Enter).
+	CtrlEnterForNewLine,
+	// Disable following the cursor horizontally
+	NoHorizontalScroll,
+	// Overwrite mode
+	AlwaysOverwrite,
+	// Read-only mode
+	ReadOnly,
+	// Password mode, display all characters as '*'
+	Password,
+	// Disable undo/redo. Note that input text owns the text data while active, if you want to provide your own undo/redo stack you need e.g. to call ClearActiveID().
+	NoUndoRedo,
+	// Allow 0123456789.+-*/eE (Scientific notation input)
+	CharsScientific,
+	// Callback on buffer capacity changes request (beyond 'buf_size' parameter value), allowing the string to grow. Notify when the string wants to be resized (for string types which hold a cache of their Size). You will be provided a new BufSize in the callback and NEED to honor it. (see misc/cpp/imgui_stdlib.h for an example of using this)
+	CallbackResize,
+	// Callback on any edit (note that InputText() already returns true on edit, the callback is useful mainly to manipulate the underlying buffer while focus is active)
+	CallbackEdit,
+	// [renamed in 1.82] name was not matching behavior
+	AlwaysInsertMode UMETA(Hidden)	
 };
 
 
