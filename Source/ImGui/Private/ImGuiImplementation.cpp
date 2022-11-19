@@ -7,6 +7,7 @@
 // For convenience and easy access to the ImGui source code, we build it as part of this module.
 // We don't need to define IMGUI_API manually because it is already done for this module.
 
+#pragma warning (default : 4668) //Since 'PLATFORM_XBOXONE' is not defined, the compiler will throw an error. For now, 'PLATFORM_XBOXONE' will be threated as 0
 #if PLATFORM_XBOXONE
 // Disable Win32 functions used in ImGui and not supported on XBox.
 #define IMGUI_DISABLE_WIN32_DEFAULT_CLIPBOARD_FUNCTIONS
